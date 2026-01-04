@@ -1,5 +1,5 @@
-import College from "../models/college.model.js"
-import Cutoff from "../models/cutoff.model.js"
+import College from "../models/College.model.js"
+import Cutoff from "../models/Cutoff.model.js"
 import logger from "../utils/logger.js"
 import { runLLMFallback } from "./llm.service.js"
 
