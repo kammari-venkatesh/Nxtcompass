@@ -1,0 +1,407 @@
+/* ========================================
+   CAREER DISCOVERY SECTION - HOME PAGE CTA
+   ======================================== */
+
+.career-discovery-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 80px 24px;
+  background: var(--bg-main);
+}
+
+/* ========================================
+   BACKGROUND
+   ======================================== */
+
+.career-discovery-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.career-discovery-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  animation: orbFloat 30s ease-in-out infinite;
+}
+
+.career-discovery-orb-1 {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(0, 217, 255, 0.3), transparent 70%);
+  top: -250px;
+  left: 5%;
+  animation-duration: 35s;
+}
+
+.career-discovery-orb-2 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(184, 69, 255, 0.3), transparent 70%);
+  bottom: -200px;
+  right: 5%;
+  animation-duration: 40s;
+  animation-delay: 7s;
+}
+
+/* ========================================
+   CONTAINER
+   ======================================== */
+
+.career-discovery-container {
+  max-width: 1300px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   CONTENT
+   ======================================== */
+
+.career-discovery-content {
+  animation: fade-up 0.8s var(--ease-soft);
+}
+
+.career-discovery-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+  background: rgba(0, 217, 255, 0.08);
+  border: 1px solid rgba(0, 217, 255, 0.25);
+  color: var(--cyan);
+}
+
+.career-discovery-title {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  max-width: 650px;
+}
+
+.career-discovery-description {
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 32px;
+  max-width: 580px;
+}
+
+.career-discovery-description strong {
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+/* ========================================
+   FEATURES
+   ======================================== */
+
+.career-discovery-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.career-discovery-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 12px;
+}
+
+.career-discovery-feature-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.career-discovery-feature-content {
+  flex: 1;
+}
+
+.career-discovery-feature-content h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.3;
+}
+
+.career-discovery-feature-content p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+/* ========================================
+   CTA
+   ======================================== */
+
+.career-discovery-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.career-discovery-btn {
+  padding: 16px 40px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-soft);
+  border: none;
+  outline: none;
+  white-space: nowrap;
+}
+
+.career-discovery-btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 217, 255, 0.25);
+}
+
+.career-discovery-btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(0, 217, 255, 0.35);
+}
+
+.career-discovery-cta-subtext {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ========================================
+   VISUAL (Card Stack)
+   ======================================== */
+
+.career-discovery-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fade-up 0.8s var(--ease-soft) 0.2s both;
+  padding: 40px 20px;
+}
+
+.career-discovery-card-stack {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.career-discovery-mini-card {
+  position: absolute;
+  width: 160px;
+  padding: 24px 16px;
+  border-radius: 16px;
+  text-align: center;
+  transition: all 0.3s var(--ease-soft);
+  cursor: pointer;
+}
+
+.career-discovery-mini-card:hover {
+  transform: rotate(0deg) translateY(-10px) !important;
+  z-index: 10;
+  box-shadow: 0 20px 50px rgba(0, 217, 255, 0.3);
+}
+
+.career-discovery-mini-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.career-discovery-mini-card p {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1200px) {
+  .career-discovery-container {
+    max-width: 1100px;
+    gap: 50px;
+  }
+
+  .career-discovery-title {
+    font-size: 42px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .career-discovery-section {
+    min-height: auto;
+    padding: 60px 20px;
+  }
+
+  .career-discovery-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .career-discovery-visual {
+    order: -1;
+    padding: 20px;
+  }
+
+  .career-discovery-card-stack {
+    height: 380px;
+    max-width: 350px;
+  }
+
+  .career-discovery-mini-card {
+    width: 140px;
+    padding: 20px 14px;
+  }
+
+  .career-discovery-title {
+    font-size: 38px;
+    max-width: 100%;
+  }
+
+  .career-discovery-description {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .career-discovery-section {
+    padding: 50px 16px;
+  }
+
+  .career-discovery-title {
+    font-size: 32px;
+  }
+
+  .career-discovery-description {
+    font-size: 16px;
+  }
+
+  .career-discovery-features {
+    gap: 10px;
+  }
+
+  .career-discovery-feature {
+    padding: 14px 16px;
+  }
+
+  .career-discovery-feature-icon {
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .career-discovery-feature-content h4 {
+    font-size: 15px;
+  }
+
+  .career-discovery-feature-content p {
+    font-size: 13px;
+  }
+
+  .career-discovery-btn {
+    width: 100%;
+    text-align: center;
+    padding: 14px 32px;
+    font-size: 15px;
+  }
+
+  .career-discovery-card-stack {
+    height: 320px;
+    max-width: 280px;
+  }
+
+  .career-discovery-mini-card {
+    width: 120px;
+    padding: 16px 12px;
+  }
+
+  .career-discovery-mini-icon {
+    font-size: 32px;
+  }
+
+  .career-discovery-mini-card p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .career-discovery-title {
+    font-size: 28px;
+  }
+
+  .career-discovery-description {
+    font-size: 15px;
+  }
+
+  .career-discovery-card-stack {
+    height: 280px;
+    max-width: 240px;
+  }
+
+  .career-discovery-mini-card {
+    width: 100px;
+    padding: 14px 10px;
+  }
+
+  .career-discovery-mini-icon {
+    font-size: 28px;
+  }
+
+  .career-discovery-mini-card p {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .career-discovery-orb,
+  .career-discovery-content,
+  .career-discovery-visual,
+  .career-discovery-mini-card:hover {
+    animation: none !important;
+  }
+
+  .career-discovery-btn-primary:hover,
+  .career-discovery-mini-card:hover {
+    transform: none !important;
+  }
+}

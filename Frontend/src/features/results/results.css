@@ -1,0 +1,245 @@
+/* =========================
+   Layout
+========================= */
+
+.results-dashboard {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, rgba(10, 14, 39, 0.95) 0%, rgba(20, 25, 60, 0.95) 100%);
+}
+
+.results-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.results-header {
+  margin-bottom: 2rem;
+}
+
+.results-header h1 {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.results-subtitle {
+  color: #b8bdd6;
+  font-size: 14px;
+}
+
+/* =========================
+   Summary Cards
+========================= */
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.summary-card {
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.summary-card.high {
+  border-color: rgba(0, 245, 160, 0.6);
+}
+
+.summary-card.moderate {
+  border-color: rgba(255, 214, 10, 0.6);
+}
+
+.summary-card.ambitious {
+  border-color: rgba(255, 0, 110, 0.6);
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #9aa3ff;
+}
+
+.summary-value {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+/* =========================
+   Results Section
+========================= */
+
+.results-section h2 {
+  margin-bottom: 16px;
+}
+
+.college-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* =========================
+   College Card
+========================= */
+
+.college-card {
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+}
+
+.college-card.high {
+  border-color: rgba(0, 245, 160, 0.5);
+}
+
+.college-card.moderate {
+  border-color: rgba(255, 214, 10, 0.5);
+}
+
+.college-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.college-name {
+  margin: 0;
+  font-size: 18px;
+}
+
+.college-branch {
+  font-size: 13px;
+  color: #b8bdd6;
+}
+
+/* =========================
+   Cutoff Info
+========================= */
+
+.college-cutoff {
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.college-cutoff p {
+  margin: 4px 0;
+}
+
+.college-cutoff .positive {
+  color: #00f5a0;
+  font-weight: 600;
+}
+
+/* =========================
+   Stats Row
+========================= */
+
+.college-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.college-stats .label {
+  display: block;
+  font-size: 11px;
+  color: #9aa3ff;
+}
+
+.college-stats .value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================
+   Actions
+========================= */
+
+.college-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.primary-btn,
+.secondary-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #00d9ff, #b845ff);
+  color: #0a0e27;
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* =========================
+   Probability Gauge
+========================= */
+
+.probability-gauge {
+  position: relative;
+  width: 90px;
+  height: 90px;
+}
+
+.gauge-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 8;
+}
+
+.gauge-progress {
+  fill: none;
+  stroke: #00f5a0;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transition: stroke-dashoffset 0.8s ease;
+}
+
+.gauge-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.gauge-value {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.gauge-label {
+  font-size: 10px;
+  color: #9aa3ff;
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 600px) {
+  .college-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,277 @@
+/* ========================================
+   STREAM SELECTION STEP
+   ======================================== */
+
+.stream-selection-step {
+  width: 100%;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.streams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+/* ========================================
+   STREAM CARD
+   ======================================== */
+
+.stream-card {
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stream-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.06) 0%, rgba(184, 69, 255, 0.06) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 0;
+}
+
+.stream-card:hover::before {
+  opacity: 1;
+}
+
+.stream-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0, 217, 255, 0.2);
+}
+
+.stream-card-selected {
+  border: 2px solid var(--cyan);
+  background: rgba(0, 217, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 217, 255, 0.25);
+}
+
+.stream-card-selected::before {
+  opacity: 1;
+}
+
+/* Card Content */
+.stream-card-icon {
+  font-size: 48px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 12px rgba(0, 217, 255, 0.4));
+  position: relative;
+  z-index: 1;
+}
+
+.stream-card-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.stream-card-description {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Exams Section */
+.stream-card-exams {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 1;
+}
+
+.exams-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.exams-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.exam-tag {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.exam-tag.more {
+  background: rgba(0, 217, 255, 0.12);
+  color: var(--cyan);
+  border-color: rgba(0, 217, 255, 0.25);
+}
+
+/* Selected Indicator */
+.stream-selected-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 217, 255, 0.3);
+  color: var(--cyan);
+  font-size: 14px;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.stream-selected-indicator svg {
+  stroke: var(--cyan);
+}
+
+/* ========================================
+   INFO BANNER
+   ======================================== */
+
+.stream-info-banner {
+  padding: 16px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(0, 217, 255, 0.08);
+  border: 1px solid rgba(0, 217, 255, 0.25);
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stream-info-banner .info-icon {
+  flex-shrink: 0;
+  stroke: var(--cyan);
+  margin-top: 2px;
+}
+
+.stream-info-banner p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.stream-info-banner strong {
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .streams-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .stream-card {
+    padding: 24px 20px;
+  }
+
+  .stream-card-icon {
+    font-size: 42px;
+  }
+
+  .stream-card-name {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .streams-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .stream-card {
+    padding: 22px 18px;
+  }
+
+  .stream-card-icon {
+    font-size: 38px;
+  }
+
+  .stream-card-name {
+    font-size: 18px;
+  }
+
+  .stream-card-description {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .streams-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stream-card {
+    padding: 20px 16px;
+  }
+
+  .stream-card-icon {
+    font-size: 36px;
+  }
+
+  .stream-card-name {
+    font-size: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stream-selection-step,
+  .stream-info-banner {
+    animation: none !important;
+  }
+
+  .stream-card:hover {
+    transform: none !important;
+  }
+}

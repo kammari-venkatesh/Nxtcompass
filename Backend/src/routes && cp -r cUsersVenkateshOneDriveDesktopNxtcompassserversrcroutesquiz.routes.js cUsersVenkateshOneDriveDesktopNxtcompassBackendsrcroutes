@@ -1,0 +1,23 @@
+import express from "express"
+import {
+  getColleges,
+  getCollegeById,
+  compareColleges,
+} from "../controllers/college.controller.js"
+
+const router = express.Router()
+
+/* =========================
+   COLLEGE ROUTES
+========================= */
+
+// List all colleges (filterable)
+router.get("/", getColleges)
+
+// Get single college by ID
+router.get("/:id", getCollegeById)
+
+// Compare multiple colleges
+router.post("/compare", compareColleges)
+
+export default router

@@ -1,0 +1,989 @@
+/* ========================================
+   ZENITH AI MENTOR - FULL PAGE EXPERIENCE
+   ======================================== */
+
+.zenith-mentor-page {
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg-main);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+}
+
+/* ========================================
+   BACKGROUND GRADIENT ORBS
+   ======================================== */
+
+.zenith-page-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.zenith-gradient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.3;
+  animation: orbFloat 25s ease-in-out infinite;
+}
+
+.zenith-gradient-orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 217, 255, 0.4), transparent 70%);
+  top: -200px;
+  right: -100px;
+  animation-duration: 30s;
+}
+
+.zenith-gradient-orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(184, 69, 255, 0.4), transparent 70%);
+  bottom: -150px;
+  left: -100px;
+  animation-duration: 35s;
+  animation-delay: 5s;
+}
+
+.zenith-gradient-orb-3 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(246, 211, 101, 0.3), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-duration: 40s;
+  animation-delay: 10s;
+}
+
+@keyframes orbFloat {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(100px, -80px) rotate(120deg);
+  }
+  66% {
+    transform: translate(-80px, 60px) rotate(240deg);
+  }
+}
+
+/* ========================================
+   MAIN CONTAINER
+   ======================================== */
+
+.zenith-mentor-container {
+  width: 100%;
+  max-width: 1200px;
+  height: 90vh;
+  max-height: 900px;
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-glass);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  animation: fade-up 0.8s var(--ease-soft);
+}
+
+/* ========================================
+   BACK TO HOME BUTTON
+   ======================================== */
+
+.zenith-back-home-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-soft);
+  z-index: 10;
+}
+
+.zenith-back-home-btn svg {
+  flex-shrink: 0;
+}
+
+.zenith-back-home-btn:hover {
+  transform: translateX(-4px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 217, 255, 0.15);
+}
+
+.zenith-back-home-btn:active {
+  transform: translateX(-2px);
+}
+
+/* ========================================
+   HEADER WITH AVATAR
+   ======================================== */
+
+.zenith-mentor-header {
+  padding: var(--space-2xl) var(--space-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  background: linear-gradient(180deg, rgba(0, 217, 255, 0.05) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.zenith-mentor-avatar {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.zenith-mentor-avatar-core {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--cyan), var(--purple));
+  box-shadow: 0 0 40px rgba(0, 217, 255, 0.6),
+              0 0 80px rgba(184, 69, 255, 0.4),
+              inset 0 0 20px rgba(255, 255, 255, 0.2);
+  animation: avatarBreath 4s ease-in-out infinite;
+  transition: all 0.5s var(--ease-soft);
+}
+
+@keyframes avatarBreath {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 40px rgba(0, 217, 255, 0.6),
+                0 0 80px rgba(184, 69, 255, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 60px rgba(0, 217, 255, 0.8),
+                0 0 100px rgba(184, 69, 255, 0.6),
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.zenith-mentor-avatar-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 217, 255, 0.3);
+  animation: ringRotate 8s linear infinite;
+}
+
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.zenith-mentor-avatar-particles {
+  position: absolute;
+  inset: -15px;
+}
+
+.zenith-mentor-avatar-particles span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  opacity: 0.8;
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.8);
+  animation: particleOrbit 4s ease-in-out infinite;
+}
+
+.zenith-mentor-avatar-particles span:nth-child(1) {
+  top: 0;
+  left: 50%;
+  animation-delay: 0s;
+}
+
+.zenith-mentor-avatar-particles span:nth-child(2) {
+  top: 50%;
+  right: 0;
+  animation-delay: 1s;
+}
+
+.zenith-mentor-avatar-particles span:nth-child(3) {
+  bottom: 0;
+  left: 50%;
+  animation-delay: 2s;
+}
+
+.zenith-mentor-avatar-particles span:nth-child(4) {
+  top: 50%;
+  left: 0;
+  animation-delay: 3s;
+}
+
+@keyframes particleOrbit {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-30px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Avatar Moods */
+.zenith-mentor-avatar-thinking .zenith-mentor-avatar-core {
+  background: radial-gradient(circle at 30% 30%, #667eea, #764ba2);
+  animation: avatarBreath 4s ease-in-out infinite, avatarSpin 10s linear infinite;
+}
+
+@keyframes avatarSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.zenith-mentor-avatar-happy .zenith-mentor-avatar-core {
+  background: radial-gradient(circle at 30% 30%, #f6d365, #fda085);
+  box-shadow: 0 0 50px rgba(253, 160, 133, 0.7),
+              0 0 100px rgba(246, 211, 101, 0.5);
+}
+
+.zenith-mentor-avatar-empathetic .zenith-mentor-avatar-core {
+  background: radial-gradient(circle at 30% 30%, #a8edea, #fed6e3);
+  box-shadow: 0 0 40px rgba(168, 237, 234, 0.6),
+              0 0 80px rgba(254, 214, 227, 0.4);
+}
+
+.zenith-mentor-avatar-positive .zenith-mentor-avatar-core {
+  background: radial-gradient(circle at 30% 30%, #00f5a0, #00d9ff);
+  box-shadow: 0 0 40px rgba(0, 245, 160, 0.6),
+              0 0 80px rgba(0, 217, 255, 0.4);
+}
+
+.zenith-mentor-avatar-helpful .zenith-mentor-avatar-core {
+  background: radial-gradient(circle at 30% 30%, #667eea, #00d9ff);
+  box-shadow: 0 0 40px rgba(102, 126, 234, 0.6),
+              0 0 80px rgba(0, 217, 255, 0.4);
+}
+
+/* Header Info */
+.zenith-mentor-info {
+  flex: 1;
+}
+
+.zenith-mentor-info h1 {
+  margin: 0 0 var(--space-xs) 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.zenith-mentor-tagline {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ========================================
+   MESSAGES AREA
+   ======================================== */
+
+.zenith-mentor-messages {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Custom scrollbar */
+.zenith-mentor-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.zenith-mentor-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.zenith-mentor-messages::-webkit-scrollbar-thumb {
+  background: rgba(var(--cyan-rgb), 0.3);
+  border-radius: 4px;
+}
+
+.zenith-mentor-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--cyan-rgb), 0.5);
+}
+
+.zenith-mentor-messages-inner {
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Individual Message */
+.zenith-message {
+  display: flex;
+  gap: var(--space-md);
+  animation: messageSlideIn 0.4s var(--ease-soft);
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.zenith-message-bot {
+  flex-direction: row;
+}
+
+.zenith-message-user {
+  flex-direction: row-reverse;
+}
+
+/* Message Avatar */
+.zenith-message-avatar {
+  flex-shrink: 0;
+}
+
+.zenith-message-avatar-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--text-primary);
+  box-shadow: 0 4px 16px rgba(var(--cyan-rgb), 0.3);
+}
+
+.zenith-message-avatar-user {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+  font-size: 0.75rem;
+}
+
+/* Message Content */
+.zenith-message-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 75%;
+}
+
+.zenith-message-user .zenith-message-content {
+  align-items: flex-end;
+}
+
+.zenith-message-bubble {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  padding: var(--space-md) var(--space-lg);
+  backdrop-filter: var(--blur-glass-light);
+  -webkit-backdrop-filter: var(--blur-glass-light);
+}
+
+.zenith-message-user .zenith-message-bubble {
+  background: var(--gradient-primary);
+  border: none;
+  box-shadow: 0 4px 16px rgba(var(--cyan-rgb), 0.3);
+}
+
+.zenith-message-bubble p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.zenith-message-user .zenith-message-bubble p {
+  color: var(--text-primary);
+}
+
+.zenith-message-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 0 var(--space-sm);
+}
+
+/* Message Cards */
+.zenith-message-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.zenith-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  transition: all 0.3s var(--ease-soft);
+}
+
+.zenith-card-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.zenith-card-content {
+  flex: 1;
+}
+
+.zenith-card-content h4 {
+  margin: 0 0 var(--space-xs) 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.zenith-card-content p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.zenith-card-stat {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  padding: 0.25rem 0.5rem;
+  background: rgba(0, 217, 255, 0.1);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+.zenith-card-arrow {
+  font-size: 1.5rem;
+  color: var(--cyan);
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease-soft);
+}
+
+.zenith-card:hover .zenith-card-arrow {
+  transform: translateX(4px);
+}
+
+/* Follow-up */
+.zenith-followup {
+  background: var(--gradient-glass);
+  border-left: 3px solid var(--cyan);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  backdrop-filter: var(--blur-glass-light);
+  -webkit-backdrop-filter: var(--blur-glass-light);
+}
+
+/* Typing Indicator */
+.zenith-typing-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass);
+  border-radius: 18px;
+  backdrop-filter: var(--blur-glass-light);
+  -webkit-backdrop-filter: var(--blur-glass-light);
+}
+
+.zenith-typing-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: typingBounce 1.4s infinite ease-in-out;
+}
+
+.zenith-typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.zenith-typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typingBounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   INPUT AREA
+   ======================================== */
+
+.zenith-mentor-input-area {
+  padding: var(--space-lg) var(--space-xl);
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid var(--border-glass);
+  backdrop-filter: var(--blur-glass-light);
+  -webkit-backdrop-filter: var(--blur-glass-light);
+}
+
+.zenith-mentor-input-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid var(--border-glass);
+  border-radius: 24px;
+  padding: var(--space-sm);
+  transition: all 0.3s var(--ease-soft);
+  margin-bottom: var(--space-sm);
+}
+
+.zenith-mentor-input-wrapper:focus-within {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 4px rgba(var(--cyan-rgb), 0.1);
+}
+
+.zenith-input-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--ease-soft);
+  flex-shrink: 0;
+}
+
+.zenith-input-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.zenith-voice-active {
+  background: rgba(0, 217, 255, 0.15) !important;
+  color: var(--cyan) !important;
+  animation: voicePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes voicePulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 217, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(0, 217, 255, 0);
+  }
+}
+
+.zenith-mentor-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-family: var(--font-body);
+  resize: none;
+  max-height: 150px;
+  padding: var(--space-sm) 0;
+  line-height: 1.6;
+}
+
+.zenith-mentor-input::placeholder {
+  color: var(--text-muted);
+}
+
+.zenith-send-btn {
+  background: var(--gradient-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.zenith-send-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(var(--cyan-rgb), 0.5);
+}
+
+.zenith-send-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.zenith-send-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.zenith-mentor-hints {
+  text-align: center;
+}
+
+.zenith-mentor-hints span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .zenith-mentor-container {
+    max-width: 95%;
+  }
+
+  .zenith-message-content {
+    max-width: 80%;
+  }
+
+  .zenith-message-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .zenith-mentor-page {
+    padding: var(--space-md);
+  }
+
+  .zenith-mentor-container {
+    height: 95vh;
+  }
+
+  .zenith-mentor-header {
+    padding: var(--space-lg);
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .zenith-mentor-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .zenith-mentor-avatar-core {
+    width: 60px;
+    height: 60px;
+  }
+
+  .zenith-mentor-info h1 {
+    font-size: 1.5rem;
+  }
+
+  .zenith-mentor-messages-inner {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .zenith-message-content {
+    max-width: 85%;
+  }
+
+  .zenith-message-avatar-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .zenith-mentor-input-area {
+    padding: var(--space-md);
+  }
+
+  .zenith-input-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .zenith-gradient-orb {
+    display: none;
+  }
+
+  .zenith-mentor-header {
+    padding: var(--space-md);
+  }
+
+  .zenith-mentor-avatar {
+    width: 70px;
+    height: 70px;
+  }
+
+  .zenith-mentor-avatar-core {
+    width: 50px;
+    height: 50px;
+  }
+
+  .zenith-mentor-info h1 {
+    font-size: 1.25rem;
+  }
+
+  .zenith-mentor-tagline {
+    font-size: 0.875rem;
+  }
+
+  .zenith-message-content {
+    max-width: 90%;
+  }
+
+  .zenith-message-cards {
+    gap: var(--space-xs);
+  }
+
+  .zenith-card {
+    padding: var(--space-sm);
+  }
+
+  .zenith-mentor-hints {
+    display: none;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY - REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .zenith-gradient-orb,
+  .zenith-mentor-avatar-core,
+  .zenith-mentor-avatar-ring,
+  .zenith-mentor-avatar-particles span,
+  .zenith-typing-indicator span,
+  .zenith-message {
+    animation: none;
+  }
+
+  .zenith-send-btn:hover:not(:disabled),
+  .zenith-card:hover .zenith-card-arrow {
+    transform: none;
+  }
+}
+
+/* ========================================
+   RICH CARD TYPES (BACKEND RESPONSES)
+   ======================================== */
+
+/* Fees Card */
+.zenith-card-fees {
+  min-width: 320px;
+}
+
+.zenith-card-location {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.zenith-card-fees-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.zenith-fee-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.zenith-fee-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.zenith-fee-value {
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Cutoff Card */
+.zenith-card-cutoff {
+  min-width: 320px;
+}
+
+.zenith-card-branch {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 4px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.zenith-card-cutoff-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.zenith-cutoff-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.zenith-cutoff-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.zenith-cutoff-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cyan);
+}
+
+.zenith-cutoff-badge {
+  margin-top: 4px;
+  padding: 6px 12px;
+  background: rgba(0, 217, 255, 0.1);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--cyan);
+  text-align: center;
+}
+
+/* Comparison Card */
+.zenith-card-comparison {
+  min-width: 300px;
+}
+
+.zenith-card-comparison-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.zenith-stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.zenith-stat-item:last-child {
+  border-bottom: none;
+}
+
+.zenith-stat-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.zenith-stat-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Eligibility Card */
+.zenith-card-eligibility {
+  min-width: 320px;
+}
+
+.zenith-card-eligibility-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.zenith-eligibility-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.zenith-eligibility-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.zenith-eligibility-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.zenith-probability-badge {
+  margin-top: 4px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.zenith-probability-high {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+.zenith-probability-moderate {
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.zenith-probability-low {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}

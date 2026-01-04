@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Bash(node src/seeds/colleges.seed.js:*)",
+      "Bash(node src/seeds/cutoffs.seed.js:*)",
+      "Bash(node src/seeds/comprehensiveColleges.seed.js:*)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm install:*)",
+      "Bash(cat:*)",
+      "Bash(npx tailwindcss init -p)",
+      "Bash(lsof:*)",
+      "Bash(node:*)"
+    ]
+  }
+}

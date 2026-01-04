@@ -1,0 +1,73 @@
+/* ================================
+   NxtCompass Quiz Entry
+   ================================ */
+
+.quiz-entry {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, rgba(10, 14, 39, 0.95) 0%, rgba(20, 25, 60, 0.95) 100%);
+}
+
+.quiz-entry-container {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- Card ---------- */
+.quiz-entry-card {
+  max-width: 520px;
+  width: 100%;
+  padding: 40px 32px;
+  text-align: center;
+}
+
+/* ---------- Title ---------- */
+.quiz-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* ---------- Subtitle ---------- */
+.quiz-subtitle {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #cfd3ff;
+  margin-bottom: 24px;
+}
+
+/* ---------- Feature List ---------- */
+.quiz-features {
+  list-style: none;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.quiz-features li {
+  font-size: 14px;
+  padding: 6px 0;
+  color: #b8bdd6;
+}
+
+/* ---------- Footer ---------- */
+.quiz-footer-text {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #b8bdd6;
+}
+
+.quiz-footer-text span {
+  color: var(--color-secondary);
+  cursor: pointer;
+}
+
+.quiz-footer-text span:hover {
+  text-decoration: underline;
+}

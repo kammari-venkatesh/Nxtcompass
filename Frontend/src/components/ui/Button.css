@@ -1,0 +1,259 @@
+/* ================================
+   Button Component
+   Core interaction element
+   ================================ */
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.02em;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.4),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+/* Variants */
+.btn-primary {
+  background: linear-gradient(135deg, #00d9ff 0%, #b845ff 100%);
+  color: #fff;
+  box-shadow:
+    0 10px 25px rgba(184, 69, 255, 0.25),
+    0 4px 10px rgba(0, 217, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 15px 40px rgba(184, 69, 255, 0.35),
+    0 6px 15px rgba(0, 217, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.btn-primary:hover:not(:disabled)::after {
+  opacity: 1;
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  box-shadow:
+    0 5px 15px rgba(184, 69, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  color: #00d9ff;
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(0, 217, 255, 0.5);
+  box-shadow:
+    0 8px 24px rgba(0, 217, 255, 0.2),
+    0 0 0 4px rgba(0, 217, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-secondary:hover:not(:disabled)::before {
+  opacity: 0.5;
+}
+
+.btn-secondary:hover:not(:disabled)::after {
+  opacity: 0.6;
+}
+
+.btn-secondary:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-secondary);
+  border: 1.5px solid transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(0, 217, 255, 0.12);
+  border-color: rgba(0, 217, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 217, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.btn-ghost:hover:not(:disabled)::before {
+  opacity: 0.4;
+}
+
+.btn-ghost:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--color-danger) 0%, #ff3860 100%);
+  color: #fff;
+  box-shadow:
+    0 8px 20px rgba(255, 0, 110, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 15px 35px rgba(255, 0, 110, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-danger:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.btn-danger:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--color-success) 0%, #00d084 100%);
+  color: #fff;
+  box-shadow:
+    0 8px 20px rgba(0, 245, 160, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-success:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 15px 35px rgba(0, 245, 160, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-success:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.btn-success:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Sizes */
+.btn-xs {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+}
+
+.btn-md {
+  padding: 12px 24px;
+  font-size: 1rem;
+}
+
+.btn-lg {
+  padding: 16px 32px;
+  font-size: 1.125rem;
+}
+
+.btn-xl {
+  padding: 20px 40px;
+  font-size: 1.25rem;
+}
+
+/* Full width */
+.btn-block {
+  width: 100%;
+}
+
+/* Disabled state */
+.btn-disabled,
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(0.3);
+}
+
+/* Loading state */
+.btn-loading {
+  pointer-events: none;
+  position: relative;
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(255, 255, 255, 0.25);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Focus state for accessibility */
+.btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(0, 217, 255, 0.3),
+    0 0 20px rgba(0, 217, 255, 0.2);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn::before,
+  .btn::after,
+  .btn-spinner {
+    animation: none;
+    transition: none;
+  }
+}

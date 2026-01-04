@@ -1,0 +1,509 @@
+/* ========================================
+   ENHANCED RESULT CARD - COMPREHENSIVE DISPLAY
+   ======================================== */
+
+.enhanced-result-card {
+  padding: 28px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.enhanced-result-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transition: all 0.3s ease;
+}
+
+.enhanced-result-card.high::before {
+  background: linear-gradient(90deg, rgb(34, 197, 94), rgb(16, 185, 129));
+}
+
+.enhanced-result-card.moderate::before {
+  background: linear-gradient(90deg, rgb(246, 211, 101), rgb(251, 146, 60));
+}
+
+.enhanced-result-card.low::before {
+  background: linear-gradient(90deg, rgb(251, 146, 60), rgb(239, 68, 68));
+}
+
+.enhanced-result-card.very-low::before {
+  background: linear-gradient(90deg, rgb(239, 68, 68), rgb(220, 38, 38));
+}
+
+.enhanced-result-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 217, 255, 0.2);
+}
+
+/* ========================================
+   HEADER SECTION
+   ======================================== */
+
+.result-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  gap: 24px;
+}
+
+/* College Info */
+.college-info {
+  flex: 1;
+}
+
+.college-badges {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tier-badge,
+.college-type-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tier-premier {
+  background: rgba(0, 217, 255, 0.15);
+  color: var(--cyan);
+  border: 1px solid rgba(0, 217, 255, 0.3);
+}
+
+.tier-excellent {
+  background: rgba(34, 197, 94, 0.15);
+  color: rgb(34, 197, 94);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.tier-good {
+  background: rgba(246, 211, 101, 0.15);
+  color: rgb(246, 211, 101);
+  border: 1px solid rgba(246, 211, 101, 0.3);
+}
+
+.tier-standard {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.college-type-badge {
+  background: rgba(184, 69, 255, 0.12);
+  color: var(--purple);
+  border: 1px solid rgba(184, 69, 255, 0.25);
+}
+
+.college-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.college-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 12px 0;
+}
+
+.location-icon {
+  stroke: var(--cyan);
+  flex-shrink: 0;
+}
+
+.branch-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.branch-icon {
+  stroke: var(--cyan);
+}
+
+/* ========================================
+   PROBABILITY BADGE
+   ======================================== */
+
+.probability-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.probability-circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.probability-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.ring-progress {
+  transition: stroke-dashoffset 1s ease-out;
+}
+
+.probability-high .ring-progress {
+  stroke: rgb(34, 197, 94);
+}
+
+.probability-moderate .ring-progress {
+  stroke: rgb(246, 211, 101);
+}
+
+.probability-low .ring-progress {
+  stroke: rgb(251, 146, 60);
+}
+
+.probability-very-low .ring-progress {
+  stroke: rgb(239, 68, 68);
+}
+
+.probability-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.probability-label {
+  padding: 6px 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.label-high {
+  background: rgba(34, 197, 94, 0.15);
+  color: rgb(34, 197, 94);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.label-moderate {
+  background: rgba(246, 211, 101, 0.15);
+  color: rgb(246, 211, 101);
+  border: 1px solid rgba(246, 211, 101, 0.3);
+}
+
+.label-low {
+  background: rgba(251, 146, 60, 0.15);
+  color: rgb(251, 146, 60);
+  border: 1px solid rgba(251, 146, 60, 0.3);
+}
+
+.label-very-low {
+  background: rgba(239, 68, 68, 0.15);
+  color: rgb(239, 68, 68);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ========================================
+   RANK COMPARISON SECTION
+   ======================================== */
+
+.rank-comparison {
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.comparison-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 20px 0;
+}
+
+.rank-item {
+  margin-bottom: 16px;
+}
+
+.rank-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.rank-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.rank-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.rank-bar-container {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rank-bar {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.8s ease-out;
+}
+
+.cutoff-bar {
+  background: linear-gradient(90deg, rgba(0, 217, 255, 0.6), rgba(0, 217, 255, 0.3));
+}
+
+.user-bar.better {
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.7), rgba(34, 197, 94, 0.4));
+}
+
+.user-bar.worse {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.7), rgba(239, 68, 68, 0.4));
+}
+
+/* Margin Indicator */
+.margin-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  margin-top: 16px;
+}
+
+.margin-icon {
+  flex-shrink: 0;
+}
+
+.margin-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.margin-text.positive {
+  color: rgb(34, 197, 94);
+}
+
+.margin-text.positive ~ .margin-icon {
+  stroke: rgb(34, 197, 94);
+}
+
+.margin-text.negative {
+  color: rgb(239, 68, 68);
+}
+
+.margin-text.negative ~ .margin-icon {
+  stroke: rgb(239, 68, 68);
+}
+
+/* ========================================
+   FOOTER SECTION
+   ======================================== */
+
+.result-card-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+}
+
+.info-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.info-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Probability Reason */
+.probability-reason {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  background: rgba(0, 217, 255, 0.06);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 10px;
+}
+
+.reason-icon {
+  flex-shrink: 0;
+  stroke: var(--cyan);
+  margin-top: 2px;
+}
+
+.probability-reason p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .enhanced-result-card {
+    padding: 24px;
+  }
+
+  .result-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .probability-badge {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .probability-circle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .probability-value {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .enhanced-result-card {
+    padding: 20px;
+  }
+
+  .college-name {
+    font-size: 18px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .rank-comparison {
+    padding: 18px;
+  }
+
+  .comparison-title {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .enhanced-result-card {
+    padding: 18px;
+  }
+
+  .college-badges {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .college-name {
+    font-size: 16px;
+  }
+
+  .probability-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .probability-circle {
+    width: 70px;
+    height: 70px;
+  }
+
+  .probability-value {
+    font-size: 18px;
+  }
+
+  .rank-bar-container {
+    height: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enhanced-result-card:hover {
+    transform: none !important;
+  }
+
+  .rank-bar,
+  .ring-progress {
+    transition: none !important;
+  }
+}

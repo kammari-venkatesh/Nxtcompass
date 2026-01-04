@@ -1,0 +1,531 @@
+/* ========================================
+   PATHFINDER QUIZ RESULTS PAGE
+   ======================================== */
+
+.quiz-results-page {
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg-main);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 20px 60px;
+}
+
+/* ========================================
+   ERROR STATE
+   ======================================== */
+
+.quiz-results-error {
+  max-width: 500px;
+  padding: 40px;
+  text-align: center;
+  animation: fade-up 0.8s var(--ease-soft);
+}
+
+.quiz-results-error h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.quiz-results-error p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+
+.quiz-results-loading {
+  text-align: center;
+  padding: 60px 20px;
+  position: relative;
+  z-index: 1;
+  animation: fade-up 0.8s var(--ease-soft);
+}
+
+.quiz-results-animation {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 40px;
+}
+
+.quiz-synapse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid transparent;
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: synapseSpin 2.2s linear infinite;
+}
+
+.quiz-synapse:nth-child(2) {
+  border-top-color: var(--purple);
+  animation-duration: 2.8s;
+}
+
+.quiz-synapse:nth-child(3) {
+  border-top-color: rgba(246, 211, 101, 0.8);
+  animation-duration: 3.4s;
+}
+
+@keyframes synapseSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.quiz-results-loading h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.quiz-results-loading p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+/* ========================================
+   RESULTS CONTAINER
+   ======================================== */
+
+.quiz-results-container {
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  z-index: 1;
+  animation: fade-up 0.8s var(--ease-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.quiz-results-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.quiz-results-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+  background: rgba(0, 217, 255, 0.08);
+  border: 1px solid rgba(0, 217, 255, 0.25);
+  color: var(--cyan);
+}
+
+.quiz-results-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  line-height: 1;
+  animation: iconFloat 3.5s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.quiz-results-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.quiz-results-subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ========================================
+   ARCHETYPE CARD
+   ======================================== */
+
+.quiz-archetype-card {
+  padding: 32px 36px;
+  text-align: center;
+}
+
+.quiz-archetype-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.quiz-archetype-description {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   STREAM DISTRIBUTION
+   ======================================== */
+
+.quiz-distribution-card {
+  padding: 32px 36px;
+}
+
+.quiz-distribution-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.quiz-distribution-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.quiz-distribution-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.quiz-distribution-item {
+  display: grid;
+  grid-template-columns: 140px 1fr 60px;
+  gap: 14px;
+  align-items: center;
+}
+
+.quiz-distribution-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.quiz-distribution-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.quiz-distribution-name {
+  text-transform: capitalize;
+}
+
+.quiz-distribution-bar-bg {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.quiz-distribution-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.8s var(--ease-soft);
+}
+
+.quiz-distribution-percentage {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: right;
+}
+
+/* ========================================
+   CAREER PATHS
+   ======================================== */
+
+.quiz-careers-card {
+  padding: 32px 36px;
+}
+
+.quiz-careers-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.quiz-careers-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.quiz-careers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.quiz-career-item {
+  padding: 20px 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.quiz-career-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.quiz-career-item p {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ========================================
+   NEXT STEPS
+   ======================================== */
+
+.quiz-next-steps {
+  margin-top: 20px;
+}
+
+.quiz-next-steps h3 {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 28px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.quiz-next-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.quiz-next-step-card {
+  padding: 28px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.quiz-next-step-icon {
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.quiz-next-step-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.quiz-next-step-card p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 8px 0;
+}
+
+.quiz-next-step-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-soft);
+  white-space: nowrap;
+}
+
+.quiz-next-step-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.3);
+}
+
+/* ========================================
+   ACTION BUTTONS
+   ======================================== */
+
+.quiz-results-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.quiz-results-btn {
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-soft);
+  border: none;
+  outline: none;
+  white-space: nowrap;
+}
+
+.quiz-results-btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.3);
+}
+
+.quiz-results-btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 217, 255, 0.4);
+}
+
+.quiz-results-btn-secondary {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.quiz-results-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .quiz-next-steps-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .quiz-results-title {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .quiz-results-page {
+    padding: 90px 16px 40px;
+  }
+
+  .quiz-results-icon {
+    font-size: 64px;
+  }
+
+  .quiz-results-title {
+    font-size: 32px;
+  }
+
+  .quiz-results-subtitle {
+    font-size: 16px;
+  }
+
+  .quiz-archetype-card,
+  .quiz-distribution-card,
+  .quiz-careers-card {
+    padding: 28px 24px;
+  }
+
+  .quiz-distribution-item {
+    grid-template-columns: 120px 1fr 55px;
+    gap: 12px;
+  }
+
+  .quiz-careers-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .quiz-next-step-card {
+    padding: 24px 20px;
+  }
+
+  .quiz-results-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .quiz-results-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .quiz-results-title {
+    font-size: 28px;
+  }
+
+  .quiz-archetype-card h3,
+  .quiz-distribution-card h3,
+  .quiz-careers-card h3 {
+    font-size: 18px;
+  }
+
+  .quiz-archetype-description {
+    font-size: 15px;
+  }
+
+  .quiz-distribution-item {
+    grid-template-columns: 100px 1fr 50px;
+    gap: 10px;
+  }
+
+  .quiz-distribution-label {
+    font-size: 13px;
+  }
+
+  .quiz-next-steps h3 {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quiz-synapse,
+  .quiz-results-icon,
+  .quiz-results-container {
+    animation: none !important;
+  }
+
+  .quiz-results-btn:hover,
+  .quiz-next-step-btn:hover {
+    transform: none !important;
+  }
+}

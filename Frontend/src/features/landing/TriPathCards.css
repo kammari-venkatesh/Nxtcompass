@@ -1,0 +1,206 @@
+/* ================================
+   Tri-Path Cards Section
+   Three conversion pathways
+   ================================ */
+
+.tri-paths {
+  width: 100%;
+  padding: 4rem 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 217, 255, 0.03) 100%);
+  position: relative;
+}
+
+.tri-paths-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.tri-paths-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.tri-paths-title {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.tri-paths-subtitle {
+  font-size: 1.125rem;
+  color: rgba(230, 232, 240, 0.85);
+  max-width: 500px;
+  margin: 0 auto;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Grid */
+.tri-paths-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+}
+
+/* Card Link */
+.tri-path-link {
+  text-decoration: none;
+  display: block;
+  height: 100%;
+  transition: all 300ms var(--transition-smooth);
+}
+
+.tri-path-link:hover {
+  transform: translateY(-8px);
+}
+
+/* Card */
+.tri-path-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  padding: 32px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tri-path-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.08) 0%, rgba(184, 69, 255, 0.08) 100%);
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+
+.tri-path-link:hover .tri-path-card::before {
+  opacity: 1;
+}
+
+/* Icon */
+.tri-path-icon {
+  font-size: 3rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 12px rgba(0, 217, 255, 0.4));
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tri-path-link:hover .tri-path-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Title */
+.tri-path-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 2px 12px rgba(0, 217, 255, 0.3);
+  transition: color 0.3s ease;
+}
+
+.tri-path-link:hover .tri-path-title {
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Description */
+.tri-path-description {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(230, 232, 240, 0.88);
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* CTA */
+.tri-path-cta {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-secondary);
+  transition: all 300ms var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-shadow: 0 2px 8px rgba(0, 217, 255, 0.5);
+}
+
+.tri-path-cta::after {
+  content: '→';
+  transition: transform 0.3s ease;
+}
+
+.tri-path-link:hover .tri-path-cta {
+  transform: translateX(4px);
+  color: var(--cyan);
+}
+
+.tri-path-link:hover .tri-path-cta::after {
+  transform: translateX(6px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .tri-paths {
+    padding: 80px 0;
+  }
+
+  .tri-paths-header {
+    margin-bottom: 60px;
+  }
+
+  .tri-paths-grid {
+    gap: 24px;
+  }
+
+  .tri-path-card {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .tri-paths {
+    padding: 60px 0;
+  }
+
+  .tri-paths-header {
+    margin-bottom: 40px;
+  }
+
+  .tri-paths-title {
+    font-size: 1.75rem;
+  }
+
+  .tri-paths-subtitle {
+    font-size: 1rem;
+  }
+
+  .tri-paths-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .tri-path-card {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .tri-path-icon {
+    font-size: 2.5rem;
+  }
+
+  .tri-path-title {
+    font-size: 1.25rem;
+  }
+}

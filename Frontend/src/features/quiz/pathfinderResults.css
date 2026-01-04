@@ -1,0 +1,501 @@
+/* ========================================
+   PATHFINDER RESULTS PAGE
+   ======================================== */
+
+.pathfinder-results-page {
+  min-height: 100vh;
+  width: 100%;
+  background: var(--bg-main);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+
+.pathfinder-results-loading {
+  text-align: center;
+  padding: 60px 20px;
+  position: relative;
+  z-index: 1;
+  animation: fade-up 0.8s var(--ease-soft);
+}
+
+.pathfinder-results-animation {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 40px;
+}
+
+.pathfinder-synapse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 2px solid transparent;
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: synapseSpin 2.2s linear infinite;
+}
+
+.pathfinder-synapse:nth-child(2) {
+  border-top-color: var(--purple);
+  animation-duration: 2.8s;
+}
+
+.pathfinder-synapse:nth-child(3) {
+  border-top-color: rgba(246, 211, 101, 0.8);
+  animation-duration: 3.4s;
+}
+
+@keyframes synapseSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pathfinder-results-loading h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.pathfinder-results-loading p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+/* ========================================
+   RESULTS CONTAINER
+   ======================================== */
+
+.pathfinder-results-container {
+  width: 100%;
+  max-width: 900px;
+  position: relative;
+  z-index: 1;
+  animation: fade-up 0.8s var(--ease-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.pathfinder-results-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.pathfinder-results-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+  background: rgba(0, 217, 255, 0.08);
+  border: 1px solid rgba(0, 217, 255, 0.25);
+  color: var(--cyan);
+}
+
+.pathfinder-results-icon {
+  font-size: 80px;
+  margin-bottom: 20px;
+  line-height: 1;
+  animation: iconFloat 3.5s ease-in-out infinite;
+}
+
+.pathfinder-results-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.pathfinder-results-subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ========================================
+   ARCHETYPE CARD
+   ======================================== */
+
+.pathfinder-archetype-card {
+  padding: 32px 36px;
+  text-align: center;
+}
+
+.pathfinder-archetype-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.pathfinder-archetype-description {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   STREAM DISTRIBUTION
+   ======================================== */
+
+.pathfinder-distribution-card {
+  padding: 32px 36px;
+}
+
+.pathfinder-distribution-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.pathfinder-distribution-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.pathfinder-distribution-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pathfinder-distribution-item {
+  display: grid;
+  grid-template-columns: 140px 1fr 60px;
+  gap: 14px;
+  align-items: center;
+}
+
+.pathfinder-distribution-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pathfinder-distribution-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.pathfinder-distribution-name {
+  text-transform: capitalize;
+}
+
+.pathfinder-distribution-bar-bg {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pathfinder-distribution-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.8s var(--ease-soft);
+}
+
+.pathfinder-distribution-percentage {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: right;
+}
+
+/* ========================================
+   CAREER PATHS
+   ======================================== */
+
+.pathfinder-careers-card {
+  padding: 32px 36px;
+}
+
+.pathfinder-careers-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.pathfinder-careers-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.pathfinder-careers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.pathfinder-career-item {
+  padding: 20px 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.pathfinder-career-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.pathfinder-career-item p {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ========================================
+   NEXT STEPS
+   ======================================== */
+
+.pathfinder-next-steps {
+  margin-top: 20px;
+}
+
+.pathfinder-next-steps h3 {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 28px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.pathfinder-next-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.pathfinder-next-step-card {
+  padding: 28px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.pathfinder-next-step-icon {
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.pathfinder-next-step-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.pathfinder-next-step-card p {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0 0 8px 0;
+}
+
+.pathfinder-next-step-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-soft);
+  white-space: nowrap;
+}
+
+.pathfinder-next-step-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.3);
+}
+
+/* ========================================
+   ACTION BUTTONS
+   ======================================== */
+
+.pathfinder-results-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pathfinder-results-btn {
+  padding: 14px 32px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-soft);
+  border: none;
+  outline: none;
+  white-space: nowrap;
+}
+
+.pathfinder-results-btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 217, 255, 0.3);
+}
+
+.pathfinder-results-btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 217, 255, 0.4);
+}
+
+.pathfinder-results-btn-secondary {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pathfinder-results-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .pathfinder-next-steps-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .pathfinder-results-title {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pathfinder-results-page {
+    padding: 40px 16px;
+  }
+
+  .pathfinder-results-icon {
+    font-size: 64px;
+  }
+
+  .pathfinder-results-title {
+    font-size: 32px;
+  }
+
+  .pathfinder-results-subtitle {
+    font-size: 16px;
+  }
+
+  .pathfinder-archetype-card,
+  .pathfinder-distribution-card,
+  .pathfinder-careers-card {
+    padding: 28px 24px;
+  }
+
+  .pathfinder-distribution-item {
+    grid-template-columns: 120px 1fr 55px;
+    gap: 12px;
+  }
+
+  .pathfinder-careers-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .pathfinder-next-step-card {
+    padding: 24px 20px;
+  }
+
+  .pathfinder-results-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .pathfinder-results-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pathfinder-results-title {
+    font-size: 28px;
+  }
+
+  .pathfinder-archetype-card h3,
+  .pathfinder-distribution-card h3,
+  .pathfinder-careers-card h3 {
+    font-size: 18px;
+  }
+
+  .pathfinder-archetype-description {
+    font-size: 15px;
+  }
+
+  .pathfinder-distribution-item {
+    grid-template-columns: 100px 1fr 50px;
+    gap: 10px;
+  }
+
+  .pathfinder-distribution-label {
+    font-size: 13px;
+  }
+
+  .pathfinder-next-steps h3 {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pathfinder-synapse,
+  .pathfinder-results-icon,
+  .pathfinder-results-container {
+    animation: none !important;
+  }
+
+  .pathfinder-results-btn:hover,
+  .pathfinder-next-step-btn:hover {
+    transform: none !important;
+  }
+}

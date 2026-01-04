@@ -1,0 +1,270 @@
+/* ================================
+   Input Component
+   Form fields for predictor, quiz, auth
+   ================================ */
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.input-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-required {
+  color: var(--color-danger);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.input-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0), rgba(184, 69, 255, 0));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.input-wrapper:focus-within {
+  border-color: rgba(0, 217, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 4px rgba(0, 217, 255, 0.15),
+    0 4px 20px rgba(0, 217, 255, 0.25),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.input-wrapper:focus-within::before {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.3), rgba(184, 69, 255, 0.3));
+}
+
+.input-wrapper.input-error {
+  border-color: rgba(255, 0, 110, 0.6);
+  background: rgba(255, 0, 110, 0.06);
+  box-shadow: 0 2px 8px rgba(255, 0, 110, 0.15);
+}
+
+.input-wrapper.input-error::before {
+  background: linear-gradient(135deg, rgba(255, 0, 110, 0.3), rgba(255, 56, 96, 0.3));
+  opacity: 0.5;
+}
+
+.input-wrapper.input-error:focus-within {
+  border-color: rgba(255, 0, 110, 0.7);
+  box-shadow:
+    0 0 0 4px rgba(255, 0, 110, 0.15),
+    0 4px 20px rgba(255, 0, 110, 0.25),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.input-wrapper.input-error:focus-within::before {
+  opacity: 1;
+}
+
+.input-wrapper.input-success {
+  border-color: rgba(0, 245, 160, 0.6);
+  background: rgba(0, 245, 160, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 245, 160, 0.15);
+}
+
+.input-wrapper.input-success::before {
+  background: linear-gradient(135deg, rgba(0, 245, 160, 0.3), rgba(0, 208, 132, 0.3));
+  opacity: 0.5;
+}
+
+.input-wrapper.input-success:focus-within {
+  border-color: rgba(0, 245, 160, 0.7);
+  box-shadow:
+    0 0 0 4px rgba(0, 245, 160, 0.15),
+    0 4px 20px rgba(0, 245, 160, 0.25),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.input-wrapper.input-success:focus-within::before {
+  opacity: 1;
+}
+
+.input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: var(--font-body);
+  padding: 12px 16px;
+  font-size: 1rem;
+  width: 100%;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.2s ease;
+}
+
+.input:focus::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.3);
+}
+
+/* Sizes */
+.input-sm {
+  padding: 8px 12px;
+  font-size: 0.875rem;
+}
+
+.input-md {
+  padding: 12px 16px;
+  font-size: 1rem;
+}
+
+.input-lg {
+  padding: 16px 20px;
+  font-size: 1.125rem;
+}
+
+/* Icons */
+.input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+}
+
+.input-icon-left {
+  padding-left: 16px;
+}
+
+.input-icon-right {
+  padding-right: 16px;
+}
+
+.input-wrapper:focus-within .input-icon {
+  color: var(--color-secondary);
+  transform: scale(1.1);
+}
+
+/* Helper text */
+.input-help-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.2s ease;
+  animation: fadeInText 0.3s ease-out;
+}
+
+.input-error-text {
+  font-size: 0.75rem;
+  color: var(--color-danger);
+  font-weight: 500;
+  animation: shakeIn 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes shakeIn {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes fadeInText {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.input-counter {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: right;
+  transition: color 0.2s ease;
+}
+
+/* Autofill styling */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.08) inset !important;
+  -webkit-text-fill-color: #fff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.input:-webkit-autofill::first-line {
+  font-family: var(--font-body);
+}
+
+/* Label animation */
+.input-label {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-group:focus-within .input-label {
+  color: var(--color-secondary);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .input-wrapper,
+  .input-wrapper::before,
+  .input,
+  .input::placeholder,
+  .input-icon,
+  .input-label,
+  .input-help-text,
+  .input-counter,
+  .input-error-text {
+    animation: none;
+    transition: none;
+  }
+}

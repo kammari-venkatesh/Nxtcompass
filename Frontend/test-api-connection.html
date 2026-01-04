@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Frontend API Connection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success {
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            border-left: 4px solid #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <h1>Frontend API Connection Test</h1>
+
+    <div class="test-section">
+        <h2>Test 1: Direct fetch to backend</h2>
+        <button onclick="testDirectFetch()">Test Direct Fetch</button>
+        <div id="directResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: CORS preflight test</h2>
+        <button onclick="testCORS()">Test CORS</button>
+        <div id="corsResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Predictor API</h2>
+        <button onclick="testPredictor()">Test Predictor</button>
+        <div id="predictorResult" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        const BACKEND_URL = 'http://localhost:5000';
+
+        async function testDirectFetch() {
+            const resultDiv = document.getElementById('directResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing...';
+
+            try {
+                console.log('Testing direct fetch to:', BACKEND_URL + '/health');
+                const response = await fetch(BACKEND_URL + '/health');
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = 'SUCCESS!\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error('HTTP ' + response.status);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'ERROR: ' + error.message + '\n\n' + error.stack;
+            }
+        }
+
+        async function testCORS() {
+            const resultDiv = document.getElementById('corsResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing CORS...';
+
+            try {
+                console.log('Testing CORS with OPTIONS request');
+                const response = await fetch(BACKEND_URL + '/api/predictor', {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Access-Control-Request-Method': 'POST',
+                        'Access-Control-Request-Headers': 'Content-Type'
+                    }
+                });
+
+                resultDiv.className = 'result success';
+                resultDiv.textContent = 'CORS Preflight SUCCESS!\n\nStatus: ' + response.status;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'CORS ERROR: ' + error.message;
+            }
+        }
+
+        async function testPredictor() {
+            const resultDiv = document.getElementById('predictorResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.textContent = 'Testing predictor API...';
+
+            const payload = {
+                rank: 50000,
+                category: 'General',
+                homeState: 'Karnataka',
+                preferredBranches: []
+            };
+
+            try {
+                console.log('Sending POST to:', BACKEND_URL + '/api/predictor');
+                console.log('Payload:', payload);
+
+                const response = await fetch(BACKEND_URL + '/api/predictor', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = 'PREDICTOR SUCCESS!\n\n' +
+                        'Count: ' + data.count + '\n' +
+                        'Success: ' + data.success + '\n\n' +
+                        'Sample result:\n' +
+                        JSON.stringify(data.results?.[0], null, 2);
+                } else {
+                    throw new Error('HTTP ' + response.status + ': ' + JSON.stringify(data));
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'PREDICTOR ERROR:\n\n' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Predictor API</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        h1 {
+            color: #00d9ff;
+            text-align: center;
+        }
+        .test-section {
+            background: #16213e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #00d9ff;
+        }
+        button {
+            background: linear-gradient(135deg, #00d9ff, #b845ff);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 10px 5px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 217, 255, 0.4);
+        }
+        .result {
+            background: #0f1620;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #00d9ff;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success {
+            border-left-color: #4caf50;
+        }
+        .error {
+            border-left-color: #f44336;
+        }
+        .info {
+            background: #1e2a3a;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .status.ok {
+            background: #4caf50;
+            color: white;
+        }
+        .status.fail {
+            background: #f44336;
+            color: white;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            background: #0f1620;
+            border: 1px solid #00d9ff;
+            border-radius: 5px;
+            color: #eee;
+            font-size: 14px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #00d9ff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 NxtCompass Predictor API Tester</h1>
+
+    <div class="info">
+        <strong>Backend URL:</strong> <span id="backendUrl">http://localhost:5000</span>
+        <span class="status" id="healthStatus">Checking...</span>
+    </div>
+
+    <div class="test-section">
+        <h2>1. Health Check</h2>
+        <button onclick="testHealth()">Test Health Endpoint</button>
+        <div id="healthResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test Predictor API</h2>
+
+        <label for="rank">Rank:</label>
+        <input type="number" id="rank" value="50000" placeholder="Enter rank">
+
+        <label for="category">Category:</label>
+        <select id="category">
+            <option value="General">General</option>
+            <option value="OBC">OBC</option>
+            <option value="SC">SC</option>
+            <option value="ST">ST</option>
+            <option value="EWS">EWS</option>
+            <option value="PwD">PwD</option>
+        </select>
+
+        <label for="homeState">Home State (Optional):</label>
+        <input type="text" id="homeState" value="Karnataka" placeholder="Enter state name">
+
+        <button onclick="testPredictor()">🚀 Test Predictor</button>
+        <button onclick="testPredictorMinimal()">Test Minimal (rank + category only)</button>
+        <div id="predictorResult" class="result" style="display:none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Quick Tests</h2>
+        <button onclick="testHighRank()">Test High Rank (1000)</button>
+        <button onclick="testOBC()">Test OBC Category</button>
+        <button onclick="testSC()">Test SC Category</button>
+        <div id="quickResult" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        const BASE_URL = 'http://localhost:5000';
+
+        // Test health on load
+        window.onload = () => {
+            testHealth();
+        };
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('healthResult');
+            const statusSpan = document.getElementById('healthStatus');
+
+            try {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result';
+                resultDiv.textContent = 'Testing...';
+
+                const response = await fetch(`${BASE_URL}/health`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                    statusSpan.className = 'status ok';
+                    statusSpan.textContent = 'OK';
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `Error: ${error.message}\n\nMake sure backend is running on ${BASE_URL}`;
+                statusSpan.className = 'status fail';
+                statusSpan.textContent = 'FAIL';
+            }
+        }
+
+        async function testPredictor() {
+            const rank = document.getElementById('rank').value;
+            const category = document.getElementById('category').value;
+            const homeState = document.getElementById('homeState').value;
+
+            const payload = {
+                rank: parseInt(rank),
+                category: category,
+                homeState: homeState || undefined,
+                preferredBranches: []
+            };
+
+            await callPredictorAPI(payload, 'predictorResult');
+        }
+
+        async function testPredictorMinimal() {
+            const rank = document.getElementById('rank').value;
+            const category = document.getElementById('category').value;
+
+            const payload = {
+                rank: parseInt(rank),
+                category: category
+            };
+
+            await callPredictorAPI(payload, 'predictorResult');
+        }
+
+        async function testHighRank() {
+            const payload = {
+                rank: 1000,
+                category: "General",
+                homeState: "Maharashtra",
+                preferredBranches: ["CSE", "IT"]
+            };
+            await callPredictorAPI(payload, 'quickResult');
+        }
+
+        async function testOBC() {
+            const payload = {
+                rank: 75000,
+                category: "OBC",
+                homeState: "Uttar Pradesh",
+                preferredBranches: []
+            };
+            await callPredictorAPI(payload, 'quickResult');
+        }
+
+        async function testSC() {
+            const payload = {
+                rank: 100000,
+                category: "SC",
+                homeState: "West Bengal",
+                preferredBranches: ["ECE", "EEE"]
+            };
+            await callPredictorAPI(payload, 'quickResult');
+        }
+
+        async function callPredictorAPI(payload, resultDivId) {
+            const resultDiv = document.getElementById(resultDivId);
+
+            try {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'result';
+                resultDiv.textContent = 'Sending request...\n\nPayload:\n' + JSON.stringify(payload, null, 2);
+
+                console.log('🚀 Sending request to:', `${BASE_URL}/api/predictor`);
+                console.log('📦 Payload:', payload);
+
+                const response = await fetch(`${BASE_URL}/api/predictor`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log('📥 Response status:', response.status);
+
+                const data = await response.json();
+                console.log('📥 Response data:', data);
+
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    const summary = {
+                        success: data.success,
+                        count: data.count,
+                        sampleResults: data.results?.slice(0, 3).map(r => ({
+                            college: r.college?.name,
+                            branch: r.branch,
+                            probability: r.probability,
+                            label: r.label
+                        }))
+                    };
+                    resultDiv.textContent = '✅ SUCCESS!\n\n' +
+                        'Full response:\n' + JSON.stringify(data, null, 2).substring(0, 2000) +
+                        (JSON.stringify(data).length > 2000 ? '\n\n... (truncated, check console for full response)' : '');
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.textContent = `❌ ERROR (HTTP ${response.status})\n\n` + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                console.error('❌ Error:', error);
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ FETCH ERROR\n\n${error.message}\n\n${error.stack}`;
+            }
+        }
+    </script>
+</body>
+</html>

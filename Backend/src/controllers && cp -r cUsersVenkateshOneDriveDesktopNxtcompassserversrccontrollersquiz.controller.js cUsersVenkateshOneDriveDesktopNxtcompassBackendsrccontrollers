@@ -1,0 +1,81 @@
+import College from "../models/College.model.js"
+
+/* =========================
+   GET ALL COLLEGES (FILTERABLE)
+========================= */
+export const getColleges = async (req, res, next) => {
+  try {
+    const { type, state, branch } = req.query
+
+    const query = {}
+
+    if (type) query.type = type
+    if (state) query.state = state
+    if (branch) query.branches = branch
+
+    const colleges = await College.find(query)
+      .sort({ nirfRank: 1 })
+      .lean()
+
+    res.status(200).json({
+      success: true,
+      count: colleges.length,
+      colleges,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+/* =========================
+   GET SINGLE COLLEGE
+========================= */
+export const getCollegeById = async (req, res, next) => {
+  try {
+    const { id } = req.params
+
+    const college = await College.findById(id).lean()
+
+    if (!college) {
+      return res.status(404).json({
+        success: false,
+        message: "College not found",
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      college,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+/* =========================
+   COMPARE COLLEGES
+========================= */
+export const compareColleges = async (req, res, next) => {
+  try {
+    const { ids } = req.body
+
+    if (!Array.isArray(ids) || ids.length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: "At least two college IDs are required for comparison",
+      })
+    }
+
+    const colleges = await College.find({
+      _id: { $in: ids },
+    }).lean()
+
+    res.status(200).json({
+      success: true,
+      count: colleges.length,
+      colleges,
+    })
+  } catch (error) {
+    next(error)
+  }
+}

@@ -1,0 +1,56 @@
+/* ================================
+   NxtCompass Exam Selection Step
+   ================================ */
+
+.exam-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.exam-card {
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.exam-card:hover {
+  border-color: var(--color-secondary);
+  background: rgba(0, 217, 255, 0.1);
+}
+
+.exam-card.active {
+  border-color: var(--color-secondary);
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(184, 69, 255, 0.1));
+  color: var(--color-secondary);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .exam-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .exam-card {
+    padding: 20px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 640px) {
+  .exam-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .exam-card {
+    padding: 16px 12px;
+    font-size: 13px;
+  }
+}

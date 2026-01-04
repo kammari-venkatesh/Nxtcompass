@@ -1,0 +1,547 @@
+/* ========================================
+   DASHBOARD PAGE LAYOUT
+   ======================================== */
+
+.dashboard-page {
+  width: 100%;
+  min-height: calc(100vh - 72px);
+  padding: var(--space-lg) 0;
+  background: var(--bg-main);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Glow Effects */
+.dashboard-page::before {
+  content: "";
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 217, 255, 0.08), transparent 70%);
+  top: -250px;
+  right: -250px;
+  pointer-events: none;
+  animation: float 20s ease-in-out infinite;
+}
+
+.dashboard-page::after {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184, 69, 255, 0.08), transparent 70%);
+  bottom: -200px;
+  left: -200px;
+  pointer-events: none;
+  animation: float 25s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, -30px);
+  }
+}
+
+.dashboard-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   DASHBOARD SECTIONS
+   ======================================== */
+
+.dashboard-section {
+  animation: fade-up 0.5s var(--ease-soft);
+}
+
+.dashboard-section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+  font-family: var(--font-display);
+}
+
+.dashboard-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+/* ========================================
+   PROFILE CARD
+   ======================================== */
+
+.profile-card-container {
+  width: 100%;
+}
+
+.profile-card {
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  transition: all 0.3s var(--ease-soft);
+  box-shadow: var(--shadow-glass);
+}
+
+.profile-card:hover {
+  border-color: var(--border-glass-hover);
+  box-shadow: var(--shadow-glass-hover);
+}
+
+.profile-header {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.profile-details {
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+  font-family: var(--font-display);
+}
+
+.profile-email {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-glass);
+}
+
+.profile-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-name {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.profile-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* ========================================
+   SAVED COLLEGES
+   ======================================== */
+
+.saved-colleges-container {
+  width: 100%;
+}
+
+.colleges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
+}
+
+.saved-college-card {
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transition: all 0.3s var(--ease-soft);
+  cursor: pointer;
+  position: relative;
+  box-shadow: var(--shadow-glass);
+}
+
+.saved-college-card:hover {
+  background: var(--bg-glass-hover);
+  border-color: var(--border-glass-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glass-hover);
+}
+
+.college-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.college-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  font-family: var(--font-display);
+  flex: 1;
+}
+
+.college-unsave-btn {
+  background: rgba(255, 107, 53, 0.1);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  color: #ff6b35;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s var(--ease-soft);
+  font-size: 0.875rem;
+}
+
+.college-unsave-btn:hover {
+  background: rgba(255, 107, 53, 0.2);
+  border-color: rgba(255, 107, 53, 0.5);
+  transform: scale(1.1);
+}
+
+.college-branch {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.college-stats {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--border-glass);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cyan);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.college-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* ========================================
+   PREDICTION HISTORY
+   ======================================== */
+
+.prediction-history-container {
+  width: 100%;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.history-item {
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  transition: all 0.3s var(--ease-soft);
+  box-shadow: var(--shadow-glass);
+}
+
+.history-item:hover {
+  background: var(--bg-glass-hover);
+  border-color: var(--border-glass-hover);
+  box-shadow: var(--shadow-glass-hover);
+}
+
+.history-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.history-exam {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.exam-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.exam-date {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.history-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-md);
+  padding: var(--space-sm);
+  background: rgba(0, 217, 255, 0.05);
+  border-radius: var(--radius-sm);
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cyan);
+}
+
+.history-actions {
+  display: flex;
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-glass);
+}
+
+/* ========================================
+   EMPTY STATES
+   ======================================== */
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: var(--blur-glass-light);
+  -webkit-backdrop-filter: var(--blur-glass-light);
+  border: 1px dashed var(--border-glass);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  animation: fade-up 0.6s var(--ease-soft);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  opacity: 0.8;
+  filter: grayscale(0.3);
+}
+
+.empty-state-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.empty-state-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: var(--space-sm);
+  }
+
+  .dashboard-container {
+    gap: var(--space-md);
+  }
+
+  .dashboard-section-title {
+    font-size: 1.25rem;
+  }
+
+  .profile-card {
+    padding: var(--space-md);
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile-avatar {
+    width: 64px;
+    height: 64px;
+    font-size: 1.5rem;
+  }
+
+  .profile-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .colleges-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .history-details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-section-header {
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+
+  .dashboard-section-header button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-page {
+    padding: var(--space-xs);
+  }
+
+  .profile-card {
+    padding: var(--space-sm);
+  }
+
+  .profile-stats {
+    gap: var(--space-xs);
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .college-stats {
+    flex-direction: column;
+  }
+
+  .history-details {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+
+  .empty-state {
+    padding: var(--space-lg) var(--space-sm);
+  }
+
+  .empty-state-icon {
+    font-size: 2.5rem;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY - REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-page::before,
+  .dashboard-page::after,
+  .dashboard-section,
+  .empty-state,
+  .saved-college-card,
+  .history-item,
+  .profile-card {
+    animation: none;
+    transition: none;
+  }
+
+  .saved-college-card:hover,
+  .history-item:hover,
+  .profile-card:hover {
+    transform: none;
+  }
+}
