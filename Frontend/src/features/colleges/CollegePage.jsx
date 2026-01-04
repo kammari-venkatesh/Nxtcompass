@@ -17,7 +17,7 @@ const CollegePage = () => {
     const fetchCollege = async () => {
       try {
         setLoading(true)
-        const response = await fetch(`http://localhost:5000/api/colleges/${collegeId}`)
+        const response = await fetch(`https://nxtcompass06.onrender.com/api/colleges/${collegeId}`)
         const data = await response.json()
 
         if (data.success) {

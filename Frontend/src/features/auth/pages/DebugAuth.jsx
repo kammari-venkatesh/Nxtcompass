@@ -11,7 +11,7 @@ const DebugAuth = () => {
 
   const handleTestAPI = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/saved-colleges', {
+      const response = await fetch('https://nxtcompass06.onrender.com/api/saved-colleges', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
