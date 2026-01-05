@@ -1,24 +1,54 @@
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef } from "react"
 import { sendChatMessage } from "../../../services/chat.service"
 import { useUserContext } from "../../../hooks/useUserContext"
 
+/**
+ * useMentor Hook - Manages Zenith AI Mentor conversation state
+ *
+ * Features:
+ * - Maintains full conversation history for context-aware responses
+ * - Sends history to backend for Agentic RAG processing
+ * - Handles typing indicators and error states
+ * - Detects sentiment for avatar mood
+ */
 export const useMentor = () => {
   const [messages, setMessages] = useState([])
   const [isTyping, setIsTyping] = useState(false)
   const { context: userContext } = useUserContext()
+  const messagesRef = useRef([])
+
+  /**
+   * Convert internal messages to API format
+   * Internal: { id, role, text, ... }
+   * API: { role, content }
+   */
+  const formatHistoryForAPI = useCallback((msgs) => {
+    return msgs
+      .filter(msg => msg.role === "user" || msg.role === "bot")
+      .map(msg => ({
+        role: msg.role === "bot" ? "assistant" : "user",
+        content: msg.text
+      }))
+  }, [])
 
   const sendMessage = useCallback(
     async (userMessage) => {
       if (!userMessage.trim()) return
 
-      // Add user message
+      // Add user message to state
       const newUserMessage = {
         id: Date.now(),
         role: "user",
         text: userMessage,
         timestamp: new Date(),
       }
-      setMessages((prev) => [...prev, newUserMessage])
+
+      // Update messages state and ref
+      setMessages((prev) => {
+        const updatedMessages = [...prev, newUserMessage]
+        messagesRef.current = updatedMessages
+        return updatedMessages
+      })
 
       // Start typing indicator
       setIsTyping(true)
@@ -32,8 +62,12 @@ export const useMentor = () => {
           branches: userContext?.branches,
         }
 
-        // Call backend AI service
-        const response = await sendChatMessage(userMessage, context)
+        // Format full conversation history for API (including the new message)
+        const allMessages = [...messagesRef.current]
+        const history = formatHistoryForAPI(allMessages)
+
+        // Call backend with full history for Agentic RAG
+        const response = await sendChatMessage(null, context, history)
 
         // Detect sentiment from AI response for avatar mood
         const sentiment = detectSentiment(response.reply, userMessage)
@@ -49,7 +83,11 @@ export const useMentor = () => {
           sentiment: sentiment,
         }
 
-        setMessages((prev) => [...prev, botMessage])
+        setMessages((prev) => {
+          const updated = [...prev, botMessage]
+          messagesRef.current = updated
+          return updated
+        })
       } catch (error) {
         console.error("AI Mentor Error:", error)
 
@@ -63,18 +101,31 @@ export const useMentor = () => {
           sentiment: "empathetic",
         }
 
-        setMessages((prev) => [...prev, errorMessage])
+        setMessages((prev) => {
+          const updated = [...prev, errorMessage]
+          messagesRef.current = updated
+          return updated
+        })
       } finally {
         setIsTyping(false)
       }
     },
-    [userContext]
+    [userContext, formatHistoryForAPI]
   )
+
+  /**
+   * Clear conversation history
+   */
+  const clearMessages = useCallback(() => {
+    setMessages([])
+    messagesRef.current = []
+  }, [])
 
   return {
     messages,
     isTyping,
     sendMessage,
+    clearMessages,
   }
 }
 
@@ -93,15 +144,19 @@ const detectSentiment = (aiReply, userMessage) => {
   const userHappy = happyKeywords.some((k) => userText.includes(k))
 
   // AI response type detection
-  const isHelpful = aiText.includes("here are") || aiText.includes("based on")
+  const isHelpful = aiText.includes("here are") || aiText.includes("based on") || aiText.includes("found")
   const isEmpathetic = aiText.includes("understand") || aiText.includes("help you")
   const isPositive = aiText.includes("great") || aiText.includes("excellent") || aiText.includes("eligible")
+  const isAsking = aiText.includes("what's your rank") || aiText.includes("tell me") || aiText.includes("could you")
 
   // Sentiment priority
   if (userConfused) return "empathetic"
   if (userHappy || isPositive) return "happy"
+  if (isAsking) return "curious"
   if (isHelpful) return "helpful"
   if (isEmpathetic) return "empathetic"
 
   return "calm"
 }
+
+export default useMentor
