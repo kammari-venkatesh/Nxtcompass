@@ -210,10 +210,25 @@ export const getChatCompletion = async (history, context = {}) => {
 
   } catch (error) {
     logger.error("AI Mentor Error:", error.message)
+    logger.error("AI Mentor Full Error:", error)
 
-    // Graceful error handling
+    // Check for specific OpenAI errors
+    if (error.code === 'invalid_api_key') {
+      logger.error("Invalid OpenAI API Key!")
+    }
+    if (error.status === 401) {
+      logger.error("OpenAI Authentication failed - check API key")
+    }
+    if (error.status === 429) {
+      logger.error("OpenAI Rate limit exceeded")
+    }
+
+    // Graceful error handling with more info in dev
+    const isDev = process.env.NODE_ENV === 'development'
     return {
-      reply: "I'm having a bit of trouble right now. Could you please rephrase your question? Or try asking about:\n• Your college options based on rank\n• Specific college information\n• Fee comparisons",
+      reply: isDev
+        ? `Error: ${error.message}. Please check the backend logs.`
+        : "I'm having a bit of trouble right now. Could you please rephrase your question? Or try asking about:\n• Your college options based on rank\n• Specific college information\n• Fee comparisons",
       cards: [],
       followUp: "What would you like to know?"
     }
