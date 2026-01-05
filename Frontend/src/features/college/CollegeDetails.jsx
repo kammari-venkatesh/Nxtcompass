@@ -946,43 +946,43 @@ const CollegeDetails = () => {
             </div>
           </aside>
         </div>
-      </div>
 
-      {/* Home Button */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: '2rem 0',
-          marginTop: '2rem'
-        }}
-      >
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate('/')}
+        {/* Home Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
           style={{
             display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.75rem 2rem',
-            backgroundColor: '#3b82f6',
-            color: 'white',
-            border: 'none',
-            borderRadius: '0.5rem',
-            fontSize: '1rem',
-            fontWeight: '600',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px rgba(59, 130, 246, 0.3)'
+            justifyContent: 'center',
+            padding: '2rem 0',
+            marginTop: '2rem'
           }}
         >
-          <Home size={20} />
-          <span>Back to Home</span>
-        </motion.button>
-      </motion.div>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.75rem 2rem',
+              backgroundColor: '#3b82f6',
+              color: 'white',
+              border: 'none',
+              borderRadius: '0.5rem',
+              fontSize: '1rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+              boxShadow: '0 4px 6px rgba(59, 130, 246, 0.3)'
+            }}
+          >
+            <Home size={20} />
+            <span>Back to Home</span>
+          </motion.button>
+        </motion.div>
+      </div>
 
       <MegaFooter />
     </div>
