@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { Home } from "lucide-react"
 import Navbar from "../../components/navigation/Navbar"
 import Button from "../../components/ui/Button"
 import "./CollegePage.css"
@@ -278,6 +279,39 @@ const CollegePage = () => {
             <Button variant="secondary" size="lg" onClick={() => navigate("/chat")}>
               Ask AI Counselor
             </Button>
+          </div>
+
+          {/* Home Button */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem', marginBottom: '2rem' }}>
+            <button
+              onClick={() => navigate('/')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.75rem 2rem',
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                boxShadow: '0 4px 6px rgba(59, 130, 246, 0.3)',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 6px 12px rgba(59, 130, 246, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 4px 6px rgba(59, 130, 246, 0.3)';
+              }}
+            >
+              <Home className="w-5 h-5" />
+              <span>Back to Home</span>
+            </button>
           </div>
         </div>
       </main>

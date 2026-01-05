@@ -704,42 +704,6 @@ const PredictorResults = () => {
         )}
       </AnimatePresence>
 
-      {/* Home Button */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          padding: '2rem 0',
-          marginTop: '2rem'
-        }}
-      >
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate('/')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.75rem 2rem',
-            backgroundColor: '#3b82f6',
-            color: 'white',
-            border: 'none',
-            borderRadius: '0.5rem',
-            fontSize: '1rem',
-            fontWeight: '600',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px rgba(59, 130, 246, 0.3)'
-          }}
-        >
-          <Home className="w-5 h-5" />
-          <span>Back to Home</span>
-        </motion.button>
-      </motion.div>
-
       <MegaFooter />
     </div>
   );
