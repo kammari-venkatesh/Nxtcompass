@@ -1,48 +1,68 @@
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef } from "react"
+import { sendChatMessage } from "../../../services/chat.service"
 
 export const useChat = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
       type: "bot",
-      content: "Hello! I'm your AI Counselor. How can I help you with your career planning today?",
+      content: "Hello! I'm Zenith AI Mentor. I can help you find colleges based on your rank, compare institutions, and guide your career decisions. What would you like to know?",
     },
   ])
   const [isTyping, setIsTyping] = useState(false)
+  const messagesRef = useRef([])
 
-  const sendUserMessage = useCallback((userMessage) => {
+  // Keep ref in sync with state
+  messagesRef.current = messages
+
+  const sendUserMessage = useCallback(async (userMessage) => {
     // Add user message
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        type: "user",
-        content: userMessage,
-      },
-    ])
+    const userMsg = {
+      id: Date.now(),
+      type: "user",
+      content: userMessage,
+    }
 
-    // Simulate AI response
+    setMessages((prev) => [...prev, userMsg])
     setIsTyping(true)
-    setTimeout(() => {
-      const botResponses = [
-        "That's a great question! Let me help you explore that further.",
-        "Based on your interests and scores, I'd recommend considering colleges that align with your career goals.",
-        "Have you thought about internships? They can be valuable for gaining practical experience.",
-        "Your profile looks promising! You have good chances at top institutions.",
-        "Let's discuss your preferences more. What kind of environment do you prefer for studying?",
-      ]
-      const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)]
 
+    try {
+      // Format history for API (include all previous messages + new user message)
+      const allMessages = [...messagesRef.current, userMsg]
+      const history = allMessages.map(msg => ({
+        role: msg.type === "bot" ? "assistant" : "user",
+        content: msg.content
+      }))
+
+      // Call backend API with history
+      const response = await sendChatMessage(null, {}, history)
+
+      // Add bot response
       setMessages((prev) => [
         ...prev,
         {
-          id: Date.now(),
+          id: Date.now() + 1,
           type: "bot",
-          content: randomResponse,
+          content: response.reply,
+          cards: response.cards || [],
+          followUp: response.followUp,
         },
       ])
+    } catch (error) {
+      console.error("AI Counselor Error:", error)
+
+      // Add error message
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          type: "bot",
+          content: "I'm having trouble connecting right now. Please try again in a moment.",
+        },
+      ])
+    } finally {
       setIsTyping(false)
-    }, 1500)
+    }
   }, [])
 
   return {
