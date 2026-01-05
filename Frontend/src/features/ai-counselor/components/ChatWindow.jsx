@@ -3,16 +3,30 @@ import { useChat } from "../hooks/useChat"
 import ChatMessage from "./ChatMessage"
 import "../zenith.css"
 
+const EXAMPLE_PROMPTS = [
+  "I have rank 5000 in General category. What colleges can I get?",
+  "Compare NIT Trichy vs NIT Warangal for CSE",
+  "What are the best colleges for Computer Science under rank 10000?",
+  "Show me affordable NITs with good placements",
+]
+
 const ChatWindow = ({ onClose }) => {
   const { messages, isTyping, sendUserMessage } = useChat()
   const [input, setInput] = useState("")
   const [isListening, setIsListening] = useState(false)
+  const [showExamples, setShowExamples] = useState(true)
   const messagesEndRef = useRef(null)
+
+  const handleExampleClick = (prompt) => {
+    sendUserMessage(prompt)
+    setShowExamples(false)
+  }
 
   const handleSend = () => {
     if (input.trim()) {
       sendUserMessage(input)
       setInput("")
+      setShowExamples(false)
     }
   }
 
@@ -103,12 +117,20 @@ const ChatWindow = ({ onClose }) => {
         </div>
 
         <div className="zenith-messages">
-          {messages.length === 0 && (
+          {messages.length === 1 && showExamples && (
             <div className="zenith-welcome">
-              <p className="zenith-welcome-text">
-                Hey! I'm Zenith, your personal AI mentor. I'm here to help you navigate your career journey.
-                Ask me anything about colleges, exams, or just share what's on your mind.
-              </p>
+              <p className="zenith-welcome-text">Try asking:</p>
+              <div className="zenith-example-prompts">
+                {EXAMPLE_PROMPTS.map((prompt, index) => (
+                  <button
+                    key={index}
+                    className="zenith-example-btn"
+                    onClick={() => handleExampleClick(prompt)}
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
