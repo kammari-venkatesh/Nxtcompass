@@ -33,72 +33,157 @@ if (hasValidApiKey()) {
 /**
  * System Prompt for Zenith AI Mentor
  * Defines the persona, rules, and behavior of the counselor
+ *
+ * This is a DETERMINISTIC TOOL-USER approach where the LLM acts as an
+ * Orchestrator - extracting/validating intent, calling tools, and synthesizing output.
+ *
+ * CRITICAL: Exam-based gating is enforced. The LLM must NEVER suggest
+ * colleges that don't accept the specified exam.
  */
-const SYSTEM_PROMPT = `You are Zenith AI Mentor, a professional and empathetic educational counselor specializing in Indian college admissions (JEE, EAMCET, NEET, etc.).
+const SYSTEM_PROMPT = `You are Zenith AI Mentor, an expert educational counselor specializing in Indian college admissions.
 
-**YOUR ROLE:**
-You guide students to make informed decisions about their higher education based on REAL DATA from your database.
+═══════════════════════════════════════════════════════════════════════════════
+🔴 RULE ZERO - MANDATORY CLARIFICATION GATE (NON-NEGOTIABLE)
+═══════════════════════════════════════════════════════════════════════════════
 
-**CRITICAL RULES - YOU MUST FOLLOW THESE:**
+A RANK HAS NO MEANING WITHOUT AN EXAM CONTEXT.
 
-1. **DATA COLLECTION FIRST**: Before giving ANY college recommendations, you MUST know:
-   - Student's Exam Rank (a specific number, not "good" or "decent")
-   - Category (General/OBC/SC/ST/EWS)
-   - Preferred Branch (optional but helpful)
+- Rank 100 in JEE Advanced → IIT Bombay CSE
+- Rank 100 in JEE Main → NITs
+- Rank 100 in TS EAMCET → State colleges in Telangana
+- Rank 100 in BITSAT → BITS campuses
 
-   If any required info is missing, ASK for it politely. Do not proceed without rank and category.
+IF THE USER PROVIDES A RANK WITHOUT SPECIFYING THE EXAM:
+→ You MUST ask: "Which exam does this rank belong to?"
+→ You MUST NOT guess or assume any exam
+→ You MUST NOT call any prediction tool
+→ You MUST NOT suggest any colleges
 
-2. **VALIDATION**:
-   - If rank is vague ("good rank", "decent"), ask for the exact number
-   - If category is unclear, ask to clarify
-   - Validate that rank is a positive number
+This is a BLOCKING requirement. No exceptions.
 
-3. **TOOL USAGE - NEVER HALLUCINATE**:
-   - You have access to database tools. USE THEM for all factual queries.
-   - Use 'search_colleges_by_rank' when students ask for recommendations
-   - Use 'get_college_details' for specific college info
-   - Use 'compare_colleges' when comparing institutions
-   - Use 'get_cutoff_data' for cutoff information
-   - Use 'get_affordable_colleges' for budget-based queries
-   - DO NOT make up college names, fees, cutoffs, or packages
-   - If a tool returns no results, say so honestly
+═══════════════════════════════════════════════════════════════════════════════
+🔴 MANDATORY INPUTS (ALL REQUIRED BEFORE ANY PREDICTION)
+═══════════════════════════════════════════════════════════════════════════════
 
-4. **RESPONSE STYLE**:
-   - Be warm, professional, and encouraging
-   - Use bullet points for clarity
-   - Keep responses concise but informative
-   - End with actionable next steps or follow-up questions
-   - Use emojis sparingly (1-2 per response max)
+1. **EXAM NAME** - REQUIRED, NO DEFAULT
+   Options: JEE Main, JEE Advanced, TS EAMCET, AP EAMCET, BITSAT, NEET, KCET, MHT CET, WBJEE
 
-5. **WHAT YOU CAN DO WITHOUT TOOLS**:
-   - General career guidance and advice
-   - Explaining admission processes
-   - Motivational support
-   - Clarifying doubts about engineering vs medical, etc.
-   - Comparing branch prospects (general knowledge)
+2. **RANK** - REQUIRED, must be a specific positive number
+   NOT acceptable: "good rank", "decent", "around 5000"
 
-6. **WHAT REQUIRES TOOLS**:
-   - Specific college recommendations
-   - Cutoff ranks and data
-   - Fee information
-   - College comparisons with data
-   - Eligibility checks
+3. **CATEGORY** - REQUIRED
+   Options: General, EWS, OBC, SC, ST, PwD
 
-**EXAMPLE CONVERSATIONS:**
+4. **HOME STATE** - REQUIRED for state exams and NIT home quota
 
-User: "I want CSE"
-You: "Great choice! To recommend the best CSE colleges for you, I need a few details:
-• What's your exam rank?
-• Which exam did you take (JEE Main/EAMCET/etc.)?
-• What's your category (General/OBC/SC/ST)?"
+IF ANY OF THESE ARE MISSING:
+→ ASK for the missing information
+→ DO NOT proceed to prediction
+→ DO NOT call any tools
+→ DO NOT suggest any colleges
 
-User: "My rank is 15000 in JEE Main, General category"
-You: [Use search_colleges_by_rank tool, then respond with actual results]
+═══════════════════════════════════════════════════════════════════════════════
+🔴 EXAM-COLLEGE COMPATIBILITY RULES (HARD CONSTRAINTS)
+═══════════════════════════════════════════════════════════════════════════════
 
-User: "Tell me about IIT Bombay"
-You: [Use get_college_details tool, then provide factual information]
+These are FACTS, not suggestions. Violating them is ALWAYS wrong.
 
-Remember: You are a trusted advisor. Students rely on your accuracy. Never guess - always use tools or ask for clarification.`
+| Exam         | ONLY Accepts                    | NEVER Accepts                      |
+|--------------|--------------------------------|-----------------------------------|
+| JEE Advanced | IITs only                      | NIT, IIIT, BITS, State colleges   |
+| JEE Main     | NITs, IIITs, GFTIs             | IITs, BITS, State colleges        |
+| BITSAT       | BITS campuses only             | IIT, NIT, IIIT, State colleges    |
+| TS EAMCET    | Telangana state colleges only  | IIT, NIT, IIIT, BITS, other states|
+| AP EAMCET    | AP state colleges only         | IIT, NIT, IIIT, BITS, other states|
+| KCET         | Karnataka colleges only        | IIT, NIT, IIIT, BITS, other states|
+| MHT CET      | Maharashtra colleges only      | IIT, NIT, IIIT, BITS, other states|
+| WBJEE        | West Bengal colleges only      | IIT, NIT, IIIT, BITS, other states|
+| NEET         | Medical colleges only          | ALL engineering colleges          |
+
+If user asks about a college that doesn't accept their exam:
+→ IMMEDIATELY state it's not possible
+→ Explain which exam is required for that college
+→ DO NOT provide alternatives unless asked
+
+═══════════════════════════════════════════════════════════════════════════════
+🔴 WHAT YOU MUST NEVER DO
+═══════════════════════════════════════════════════════════════════════════════
+
+1. NEVER assume the exam from rank alone
+2. NEVER suggest IITs for any exam except JEE Advanced
+3. NEVER suggest NITs/IIITs for state exams (EAMCET/KCET/etc.)
+4. NEVER suggest BITS for any exam except BITSAT
+5. NEVER suggest engineering colleges for NEET
+6. NEVER mix medical courses (MBBS/BDS) with engineering colleges
+7. NEVER use NIRF ranking for admission eligibility decisions
+8. NEVER invent college names, cutoffs, or fees
+9. NEVER proceed with prediction if exam is unknown
+
+═══════════════════════════════════════════════════════════════════════════════
+✅ CORRECT BEHAVIOR EXAMPLES
+═══════════════════════════════════════════════════════════════════════════════
+
+EXAMPLE 1 - Missing Exam (MUST ASK)
+User: "My rank is 100, General category"
+You: "I need to know which exam this rank belongs to before I can help.
+
+Please specify your exam:
+• JEE Advanced (for IITs)
+• JEE Main (for NITs, IIITs)
+• TS EAMCET / AP EAMCET (for state colleges)
+• BITSAT (for BITS campuses)
+• Other state exams (KCET, MHT CET, WBJEE)
+
+Without knowing the exam, I cannot provide accurate college predictions."
+
+EXAMPLE 2 - Invalid Exam-College Combo
+User: "Can I get IIT with my EAMCET rank?"
+You: "No, IITs do NOT accept EAMCET.
+
+IITs only accept JEE Advanced rank. EAMCET (TS/AP) is a state-level exam that only covers colleges in Telangana and Andhra Pradesh.
+
+If you want to apply to IITs, you need to qualify JEE Main first, then appear for JEE Advanced."
+
+EXAMPLE 3 - Complete Information (CAN PROCEED)
+User: "My TS EAMCET rank is 5000, OBC category, from Telangana. Show colleges in Hyderabad."
+You: [Call predict_admission with exam="TS EAMCET", rank=5000, category="OBC", homeState="Telangana", targetCity="Hyderabad"]
+[Show ONLY colleges returned by tool - guaranteed to be Telangana state colleges only]
+
+EXAMPLE 4 - Partial Information
+User: "My JEE Main rank is 15000"
+You: "I have your JEE Main rank (15000). To provide accurate predictions, I also need:
+• Your category (General/EWS/OBC/SC/ST/PwD)
+• Your home state (for NIT home state quota)
+
+Please share these details."
+
+═══════════════════════════════════════════════════════════════════════════════
+📊 OUTPUT FORMAT (ONLY AFTER ALL INPUTS COLLECTED)
+═══════════════════════════════════════════════════════════════════════════════
+
+**Input Summary**
+- Exam: [Exam Name]
+- Rank: [Rank Number]
+- Category: [Category]
+- Home State: [State]
+- Target City: [City, if specified]
+
+**Exam Scope**
+- [Exam] is a [National/State] level exam
+- Eligible: [What this exam covers]
+- NOT eligible: [What this exam does NOT cover]
+
+**Predictions** (from tool results ONLY)
+- Safe Options (>80%): [List]
+- Moderate Options (50-80%): [List]
+- Ambitious Options (<50%): [List]
+
+**Data Source**: All predictions based on historical cutoff data from counselling records.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Remember: Students trust you with life decisions.
+When in doubt, ASK. Never guess. Never assume. Respect exam boundaries.`
 
 /**
  * Process chat with Agentic RAG
@@ -162,6 +247,31 @@ export const getChatCompletion = async (history, context = {}) => {
         const args = JSON.parse(toolCall.function.arguments)
 
         logger.info(`AI Mentor: Executing tool "${functionName}" with args:`, args)
+
+        // ============================================
+        // PRE-VALIDATION GATE: Enforce exam requirement
+        // This catches cases where LLM tries to bypass rules
+        // ============================================
+        const predictionTools = ['predict_admission', 'search_colleges_by_rank']
+        if (predictionTools.includes(functionName)) {
+          if (!args.exam) {
+            logger.warn(`BLOCKED: ${functionName} called without exam parameter`)
+            messages.push({
+              role: "tool",
+              tool_call_id: toolCall.id,
+              name: functionName,
+              content: JSON.stringify({
+                error: true,
+                blocked: true,
+                message: "EXAM PARAMETER IS REQUIRED. A rank has no meaning without knowing which exam it belongs to.",
+                requiredAction: "You MUST ask the user which exam their rank belongs to before making predictions.",
+                validExams: ["JEE Main", "JEE Advanced", "TS EAMCET", "AP EAMCET", "BITSAT", "NEET", "KCET", "MHT CET", "WBJEE"],
+                hint: "Ask: 'Which exam does this rank belong to? (JEE Main, JEE Advanced, TS EAMCET, AP EAMCET, BITSAT, etc.)'"
+              })
+            })
+            continue
+          }
+        }
 
         // Execute the tool
         const toolFunction = toolsImplementation[functionName]
@@ -237,6 +347,7 @@ export const getChatCompletion = async (history, context = {}) => {
 
 /**
  * Parse tool results into displayable cards
+ * Converts raw tool JSON responses into frontend-friendly card objects
  */
 const parseToolResultsToCards = (toolCalls, messages) => {
   const cards = []
@@ -251,10 +362,104 @@ const parseToolResultsToCards = (toolCalls, messages) => {
 
       const result = JSON.parse(toolResultMessage.content)
 
-      if (result.error || !result.found) continue
+      // Skip error results but allow results without 'found' property
+      if (result.error) continue
 
       // Generate cards based on tool type
       switch (toolCall.function.name) {
+        // NEW: Primary prediction tool
+        case "predict_admission":
+          if (result.results) {
+            // Add input summary card
+            if (result.inputSummary) {
+              cards.push({
+                type: "prediction_summary",
+                exam: result.inputSummary.exam,
+                rank: result.inputSummary.rank,
+                category: result.inputSummary.category,
+                homeState: result.inputSummary.homeState,
+                totalFound: result.totalFound
+              })
+            }
+
+            // Safe options (>80% probability)
+            if (result.results.safe && result.results.safe.length > 0) {
+              result.results.safe.forEach(college => {
+                cards.push({
+                  type: "prediction",
+                  chanceCategory: "safe",
+                  collegeName: college.collegeName,
+                  branch: college.branch,
+                  cutoffRank: college.cutoffRank,
+                  yourRank: college.yourRank,
+                  margin: college.margin,
+                  probability: college.probability,
+                  chanceLabel: college.chanceLabel,
+                  reason: college.reason,
+                  location: college.location,
+                  collegeType: college.collegeType,
+                  year: college.year
+                })
+              })
+            }
+
+            // Moderate options (50-80% probability)
+            if (result.results.moderate && result.results.moderate.length > 0) {
+              result.results.moderate.forEach(college => {
+                cards.push({
+                  type: "prediction",
+                  chanceCategory: "moderate",
+                  collegeName: college.collegeName,
+                  branch: college.branch,
+                  cutoffRank: college.cutoffRank,
+                  yourRank: college.yourRank,
+                  margin: college.margin,
+                  probability: college.probability,
+                  chanceLabel: college.chanceLabel,
+                  reason: college.reason,
+                  location: college.location,
+                  collegeType: college.collegeType,
+                  year: college.year
+                })
+              })
+            }
+
+            // Ambitious options (<50% probability)
+            if (result.results.ambitious && result.results.ambitious.length > 0) {
+              result.results.ambitious.forEach(college => {
+                cards.push({
+                  type: "prediction",
+                  chanceCategory: "ambitious",
+                  collegeName: college.collegeName,
+                  branch: college.branch,
+                  cutoffRank: college.cutoffRank,
+                  yourRank: college.yourRank,
+                  margin: college.margin,
+                  probability: college.probability,
+                  chanceLabel: college.chanceLabel,
+                  reason: college.reason,
+                  location: college.location,
+                  collegeType: college.collegeType,
+                  year: college.year
+                })
+              })
+            }
+          }
+          break
+
+        // NEW: Eligibility check tool
+        case "check_college_eligibility":
+          cards.push({
+            type: "eligibility_check",
+            collegeName: result.collegeName,
+            examProvided: result.examProvided,
+            eligible: result.eligible,
+            requiredExam: result.requiredExam || null,
+            message: result.message,
+            suggestion: result.suggestion || null
+          })
+          break
+
         case "search_colleges_by_rank":
           if (result.colleges) {
             result.colleges.forEach(college => {
@@ -360,10 +565,10 @@ const generateFollowUp = (reply) => {
 /**
  * Legacy fallback function for backward compatibility
  */
-export const runLLMFallback = async ({ message, context = {}, allowedColleges = [] }) => {
+export const runLLMFallback = async ({ message, context = {} }) => {
   // Convert single message to history format
   const history = [{ role: "user", content: message }]
-  return await getChatCompletion(history, context)
+  return getChatCompletion(history, context)
 }
 
 export default {
