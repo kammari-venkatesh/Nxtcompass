@@ -9,7 +9,6 @@ import {
   Zap, Globe, Loader, Home
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { getCollegeById } from './collegeData';
 import MegaFooter from '../../components/footer/MegaFooter';
 import './CollegeDetails.css';
 
@@ -160,20 +159,132 @@ const CollegeDetails = () => {
   const [loading, setLoading] = useState(true);
   const [college, setCollege] = useState(null);
 
-  // Fetch college data based on ID
+  // Fetch college data from API based on ID
   useEffect(() => {
-    setLoading(true);
-    // Simulate async data fetching
-    setTimeout(() => {
-      const collegeData = getCollegeById(id);
-      if (collegeData) {
-        setCollege(collegeData);
-      } else {
-        // If college not found, use fallback data
+    const fetchCollege = async () => {
+      setLoading(true);
+      try {
+        const API_URL = import.meta.env.VITE_API_URL || 'https://nxtcompass06.onrender.com/api';
+        const response = await fetch(`${API_URL}/colleges/${id}`);
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          // Transform API data to match component's expected format
+          const collegeData = data.data;
+          const transformedCollege = {
+            _id: collegeData._id,
+            name: collegeData.name,
+            slug: collegeData.slug || collegeData._id,
+            type: collegeData.type || 'Engineering',
+            logo: `https://api.dicebear.com/7.x/shapes/svg?seed=${collegeData.name}`,
+            backgroundImage: 'https://images.unsplash.com/photo-1562774053-701939374585?w=1920',
+
+            hero_stats: {
+              nirf_rank: collegeData.nireRank || collegeData.nirf_rank || 'N/A',
+              accreditation: collegeData.accreditation || 'NAAC A',
+              est_year: collegeData.establishedYear || collegeData.est_year || 'N/A',
+              campus_area: collegeData.campusArea || 'N/A',
+              location: {
+                city: collegeData.city || 'India',
+                state: collegeData.state || '',
+                coordinates: { lat: 0, lng: 0 }
+              }
+            },
+
+            placements: {
+              avg_package: collegeData.avgPackage || collegeData.placements?.avg_package || 1000000,
+              highest_package: collegeData.highestPackage || collegeData.placements?.highest_package || 5000000,
+              placement_rate: collegeData.placementRate || collegeData.placements?.placement_rate || 85,
+              top_recruiters: collegeData.topRecruiters || ['TCS', 'Infosys', 'Wipro', 'Cognizant'],
+              trend_graph: [
+                { year: '2020', avg: 8 },
+                { year: '2021', avg: 9 },
+                { year: '2022', avg: 10 },
+                { year: '2023', avg: 11 },
+                { year: '2024', avg: 12 }
+              ]
+            },
+
+            courses: (collegeData.branches || []).map(branch => ({
+              name: branch,
+              duration: '4 Years',
+              fees: {
+                total: collegeData.fees?.general || 400000,
+                per_year: (collegeData.fees?.general || 400000) / 4
+              },
+              seats: collegeData.totalSeats ? Math.floor(collegeData.totalSeats / (collegeData.branches?.length || 1)) : 60,
+              cutoff: { exam: 'JEE Main', closing_rank: 10000 }
+            })),
+
+            reviews: {
+              rating: 4.2,
+              sentiment_summary: `${collegeData.name} offers quality education with good placement opportunities.`,
+              positive_percentage: 80,
+              featured_reviews: [
+                {
+                  user: 'Student',
+                  batch: 2024,
+                  text: 'Good college with decent facilities and placements.',
+                  verified_student: true
+                }
+              ]
+            },
+
+            pros_cons: {
+              pros: [
+                'Good academic curriculum',
+                'Experienced faculty',
+                'Decent placement record',
+                'Industry connections'
+              ],
+              cons: [
+                'Infrastructure could be improved',
+                'Limited hostel facilities'
+              ]
+            },
+
+            facilities: [
+              { name: 'WiFi Campus', icon: 'Wifi', image: 'https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=400' },
+              { name: 'Library', icon: 'Library', image: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=400' },
+              { name: 'Computer Labs', icon: 'Laptop', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400' },
+              { name: 'Cafeteria', icon: 'Coffee', image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400' }
+            ],
+
+            alumni: [],
+
+            admissions: {
+              status: 'Open',
+              apply_link: collegeData.website ? `https://${collegeData.website}` : '#',
+              official_website: collegeData.website ? `https://${collegeData.website}` : '#',
+              brochure_link: '#',
+              deadline: '2025-06-15',
+              process_steps: [
+                { step: 1, title: 'Register for Entrance Exam', description: 'Register for JEE Main or other relevant entrance exams.' },
+                { step: 2, title: 'Appear for Exam', description: 'Take the entrance examination and await results.' },
+                { step: 3, title: 'Counseling', description: 'Participate in the counseling process for seat allocation.' },
+                { step: 4, title: 'Document Verification', description: 'Submit required documents for verification.' }
+              ]
+            },
+
+            overview: `${collegeData.name} is a ${collegeData.type || 'renowned'} institution located in ${collegeData.city || 'India'}${collegeData.state ? `, ${collegeData.state}` : ''}. The college offers various undergraduate programs and has a strong focus on academic excellence and industry readiness.`,
+
+            admission_probability: 75
+          };
+
+          setCollege(transformedCollege);
+        } else {
+          // If college not found, use fallback data
+          setCollege(fallbackCollegeData);
+        }
+      } catch (error) {
+        console.error('Error fetching college:', error);
         setCollege(fallbackCollegeData);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    }, 500);
+    };
+
+    fetchCollege();
   }, [id]);
 
   useEffect(() => {
