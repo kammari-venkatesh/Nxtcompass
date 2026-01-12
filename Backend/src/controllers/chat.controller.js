@@ -124,7 +124,65 @@ export const simpleChat = async (req, res, next) => {
   }
 }
 
+/**
+ * POST /api/chat/stream
+ * Streaming endpoint for real-time AI responses
+ * Uses Server-Sent Events (SSE) for progressive response delivery
+ */
+export const chatWithAIStream = async (req, res, next) => {
+  try {
+    const { history, context } = req.body
+
+    // Validate input
+    if (!history || !Array.isArray(history) || history.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Conversation history is required for streaming",
+      })
+    }
+
+    // Set up SSE headers
+    res.setHeader('Content-Type', 'text/event-stream')
+    res.setHeader('Cache-Control', 'no-cache')
+    res.setHeader('Connection', 'keep-alive')
+    res.flushHeaders()
+
+    // Import streaming function
+    const { getChatCompletionStream } = await import("../services/llm.service.js")
+
+    // Send chunks as they arrive
+    const onChunk = (text, isFinal = false) => {
+      res.write(`data: ${JSON.stringify({ type: 'chunk', content: text, isFinal })}\n\n`)
+    }
+
+    // Send complete response with cards
+    const onComplete = (result) => {
+      res.write(`data: ${JSON.stringify({ 
+        type: 'complete', 
+        reply: result.reply,
+        cards: result.cards,
+        followUp: result.followUp 
+      })}\n\n`)
+      res.write('data: [DONE]\n\n')
+      res.end()
+    }
+
+    // Start streaming
+    await getChatCompletionStream(history, context || {}, onChunk, onComplete)
+
+  } catch (error) {
+    logger.error("Chat Stream Controller Error:", error.message)
+    // Send error through SSE
+    res.write(`data: ${JSON.stringify({ 
+      type: 'error', 
+      message: 'An error occurred while processing your request' 
+    })}\n\n`)
+    res.end()
+  }
+}
+
 export default {
   chatWithAI,
   simpleChat,
+  chatWithAIStream,
 }

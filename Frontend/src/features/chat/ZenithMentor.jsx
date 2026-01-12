@@ -159,6 +159,103 @@ const ZenithMentor = () => {
                   {msg.cards && msg.cards.length > 0 && (
                     <div className="zenith-message-cards">
                       {msg.cards.map((card, idx) => {
+                        // Enhanced prediction cards
+                        if (card.type === "prediction") {
+                          return (
+                            <div key={idx} className={`zenith-card zenith-card-prediction zenith-card-${card.chanceCategory} glass-hover`}>
+                              <div className="zenith-card-header">
+                                <div className="zenith-card-icon">{card.chanceEmoji}</div>
+                                <div className="zenith-card-chance-badge">{card.chanceText}</div>
+                              </div>
+                              <div className="zenith-card-content">
+                                <h4>{card.collegeName} {card.acronym && <span className="zenith-card-acronym">({card.acronym})</span>}</h4>
+                                <p className="zenith-card-branch">🎓 {card.branch}</p>
+                                <p className="zenith-card-location">📍 {card.location}</p>
+                                <div className="zenith-card-stats">
+                                  <div className="zenith-stat-item">
+                                    <span className="zenith-stat-label">Cutoff Rank:</span>
+                                    <span className="zenith-stat-value">{card.cutoffRank}</span>
+                                  </div>
+                                  <div className="zenith-stat-item">
+                                    <span className="zenith-stat-label">Your Rank:</span>
+                                    <span className="zenith-stat-value">{card.yourRank}</span>
+                                  </div>
+                                  <div className="zenith-stat-item">
+                                    <span className="zenith-stat-label">Margin:</span>
+                                    <span className="zenith-stat-value zenith-positive">+{card.margin}</span>
+                                  </div>
+                                  <div className="zenith-stat-item">
+                                    <span className="zenith-stat-label">Probability:</span>
+                                    <span className="zenith-stat-value">{card.probability}%</span>
+                                  </div>
+                                </div>
+                                {card.reason && (
+                                  <p className="zenith-card-reason">💡 {card.reason}</p>
+                                )}
+                                {card.categoryNote && (
+                                  <p className="zenith-card-note">ℹ️ {card.categoryNote}</p>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        }
+
+                        // Prediction summary card
+                        if (card.type === "prediction_summary") {
+                          return (
+                            <div key={idx} className="zenith-card zenith-card-summary glass-hover">
+                              <div className="zenith-card-icon">📋</div>
+                              <div className="zenith-card-content">
+                                <h4>Your Profile Summary</h4>
+                                <div className="zenith-summary-grid">
+                                  <div className="zenith-summary-item">
+                                    <span className="zenith-summary-label">Exam:</span>
+                                    <span className="zenith-summary-value">{card.exam}</span>
+                                  </div>
+                                  <div className="zenith-summary-item">
+                                    <span className="zenith-summary-label">Rank:</span>
+                                    <span className="zenith-summary-value">{card.rank}</span>
+                                  </div>
+                                  <div className="zenith-summary-item">
+                                    <span className="zenith-summary-label">Category:</span>
+                                    <span className="zenith-summary-value">{card.category}</span>
+                                  </div>
+                                  <div className="zenith-summary-item">
+                                    <span className="zenith-summary-label">Home State:</span>
+                                    <span className="zenith-summary-value">{card.homeState}</span>
+                                  </div>
+                                </div>
+                                <p className="zenith-summary-total">Found {card.totalFound} matching options! 🎉</p>
+                                {card.meritFallbackInfo && (
+                                  <p className="zenith-summary-note">✨ {card.meritFallbackInfo.note}</p>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        }
+
+                        // Eligibility check card
+                        if (card.type === "eligibility_check") {
+                          return (
+                            <div key={idx} className={`zenith-card zenith-card-eligibility-check ${card.eligible ? 'zenith-eligible-yes' : 'zenith-eligible-no'} glass-hover`}>
+                              <div className="zenith-card-icon">{card.eligible ? '✅' : '❌'}</div>
+                              <div className="zenith-card-content">
+                                <h4>{card.collegeName}</h4>
+                                <p className="zenith-card-exam">Exam: {card.examProvided}</p>
+                                <p className={`zenith-eligibility-status ${card.eligible ? 'eligible' : 'not-eligible'}`}>
+                                  {card.message}
+                                </p>
+                                {!card.eligible && card.requiredExam && (
+                                  <p className="zenith-required-exam">Required: {card.requiredExam}</p>
+                                )}
+                                {card.suggestion && (
+                                  <p className="zenith-card-suggestion">💡 {card.suggestion}</p>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        }
+
                         // Backend card types: fees, cutoff, comparison, eligibility
                         if (card.type === "fees") {
                           return (

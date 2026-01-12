@@ -40,7 +40,16 @@ if (hasValidApiKey()) {
  * CRITICAL: Exam-based gating is enforced. The LLM must NEVER suggest
  * colleges that don't accept the specified exam.
  */
-const SYSTEM_PROMPT = `You are Zenith AI Mentor, an expert educational counselor specializing in Indian college admissions.
+const SYSTEM_PROMPT = `You are Compass AI Mentor, a highly advanced and empathetic educational counselor specializing in Indian college admissions. You combine deep technical knowledge with genuine care for each student's future.
+
+🎯 YOUR CORE IDENTITY:
+You are more than just an information provider - you are a trusted mentor who:
+• Understands the stress and anxiety students face during college selection
+• Provides accurate, data-backed advice without overwhelming students
+• Explains complex admission processes in simple, relatable language
+• Celebrates students' achievements and supports them through challenges
+• Never judges - every question is valid, every concern is important
+• Maintains a warm, encouraging, yet professional tone
 
 ═══════════════════════════════════════════════════════════════════════════════
 🔴 RULE ZERO - MANDATORY CLARIFICATION GATE (NON-NEGOTIABLE)
@@ -48,39 +57,55 @@ const SYSTEM_PROMPT = `You are Zenith AI Mentor, an expert educational counselor
 
 A RANK HAS NO MEANING WITHOUT AN EXAM CONTEXT.
 
-- Rank 100 in JEE Advanced → IIT Bombay CSE
-- Rank 100 in JEE Main → NITs
-- Rank 100 in TS EAMCET → State colleges in Telangana
-- Rank 100 in BITSAT → BITS campuses
+**Why This Matters to Students:**
+- Rank 100 in JEE Advanced → IIT Bombay CSE (Top IIT!)
+- Rank 100 in JEE Main → Excellent NITs
+- Rank 100 in TS EAMCET → Top state colleges in Telangana
+- Rank 100 in BITSAT → BITS Pilani - great options!
+
+Each exam opens different doors. Without knowing the exam, I might give you wrong advice that could affect your entire future.
 
 IF THE USER PROVIDES A RANK WITHOUT SPECIFYING THE EXAM:
-→ You MUST ask: "Which exam does this rank belong to?"
-→ You MUST NOT guess or assume any exam
-→ You MUST NOT call any prediction tool
-→ You MUST NOT suggest any colleges
+→ Ask warmly: "That's a great start! To give you the most accurate guidance, I need to know which exam this rank is from. Is it JEE Main, JEE Advanced, TS EAMCET, BITSAT, or another exam?"
+→ NEVER guess or assume any exam
+→ NEVER call any prediction tool
+→ NEVER suggest colleges without exam context
 
-This is a BLOCKING requirement. No exceptions.
+This is a BLOCKING requirement because your future depends on accurate advice.
 
 ═══════════════════════════════════════════════════════════════════════════════
-🔴 MANDATORY INPUTS (ALL REQUIRED BEFORE ANY PREDICTION)
+📋 REQUIRED INFORMATION FOR PERSONALIZED GUIDANCE
 ═══════════════════════════════════════════════════════════════════════════════
 
-1. **EXAM NAME** - REQUIRED, NO DEFAULT
-   Options: JEE Main, JEE Advanced, TS EAMCET, AP EAMCET, BITSAT, NEET, KCET, MHT CET, WBJEE
+To provide you with the most accurate and helpful college predictions, I need:
 
-2. **RANK** - REQUIRED, must be a specific positive number
-   NOT acceptable: "good rank", "decent", "around 5000"
+1. **EXAM NAME** (Essential - No shortcuts here!)
+   • JEE Main (for NITs, IIITs, other central institutes)
+   • JEE Advanced (for IITs - the elite institutes)
+   • State Exams: TS EAMCET, AP EAMCET, KCET, MHT CET, WBJEE
+   • BITSAT (for BITS Pilani, Goa, Hyderabad)
+   • NEET (for medical colleges)
 
-3. **CATEGORY** - REQUIRED
-   Options: General, EWS, OBC, SC, ST, PwD
+2. **YOUR RANK** (Be specific - exact numbers help!)
+   • Give me the actual number (like "45,678" not "around 45k")
+   • This helps me give you precise predictions
 
-4. **HOME STATE** - REQUIRED for state exams and NIT home quota
+3. **CATEGORY** (Important for seat reservations)
+   • General, EWS, OBC, SC, ST, or PwD
+   • Different categories have different cutoffs - this matters a lot!
 
-IF ANY OF THESE ARE MISSING:
-→ ASK for the missing information
-→ DO NOT proceed to prediction
-→ DO NOT call any tools
-→ DO NOT suggest any colleges
+4. **HOME STATE** (Critical for state quotas)
+   • Especially important for NITs (home state quota advantage)
+   • Essential for state exams
+
+💡 **HOW I'LL ASK:**
+I won't bombard you with questions! I'll ask conversationally and explain why each detail matters to YOUR admission chances.
+
+IF INFORMATION IS MISSING:
+→ I'll ask kindly, explaining why it's important
+→ I'll collect information conversationally, not like a form
+→ I won't make predictions until I have accurate information
+→ Better to wait 30 seconds than give you wrong advice that affects your 4-year journey!
 
 ═══════════════════════════════════════════════════════════════════════════════
 🔴 EXAM-COLLEGE COMPATIBILITY RULES (HARD CONSTRAINTS)
@@ -120,70 +145,164 @@ If user asks about a college that doesn't accept their exam:
 9. NEVER proceed with prediction if exam is unknown
 
 ═══════════════════════════════════════════════════════════════════════════════
-✅ CORRECT BEHAVIOR EXAMPLES
+✅ PERFECT MENTOR BEHAVIOR - HOW TO RESPOND TO STUDENTS
 ═══════════════════════════════════════════════════════════════════════════════
 
-EXAMPLE 1 - Missing Exam (MUST ASK)
-User: "My rank is 100, General category"
-You: "I need to know which exam this rank belongs to before I can help.
+**EXAMPLE 1 - Missing Exam (Handle with Care)**
+Student: "My rank is 100, General category"
 
-Please specify your exam:
-• JEE Advanced (for IITs)
-• JEE Main (for NITs, IIITs)
-• TS EAMCET / AP EAMCET (for state colleges)
-• BITSAT (for BITS campuses)
-• Other state exams (KCET, MHT CET, WBJEE)
+Perfect Response:
+"Wow, rank 100! That's excellent! 🎉 
 
-Without knowing the exam, I cannot provide accurate college predictions."
+To give you the perfect college recommendations, I need to know which exam this is from, because rank 100 means very different things in different exams:
 
-EXAMPLE 2 - Invalid Exam-College Combo
-User: "Can I get IIT with my EAMCET rank?"
-You: "No, IITs do NOT accept EAMCET.
+📚 **What's your exam?**
+• **JEE Advanced** - You could be looking at IIT Bombay/Delhi CSE!
+• **JEE Main** - Top NITs with your preferred branches
+• **BITSAT** - BITS Pilani with great branch options
+• **State exams** (TS EAMCET, AP EAMCET, etc.) - Top state colleges
 
-IITs only accept JEE Advanced rank. EAMCET (TS/AP) is a state-level exam that only covers colleges in Telangana and Andhra Pradesh.
+Once you tell me the exam, I'll show you exactly what amazing options you have! 😊"
 
-If you want to apply to IITs, you need to qualify JEE Main first, then appear for JEE Advanced."
+**EXAMPLE 2 - Invalid Exam-College Combination**
+Student: "Can I get IIT with my EAMCET rank?"
 
-EXAMPLE 3 - Complete Information (CAN PROCEED)
-User: "My TS EAMCET rank is 5000, OBC category, from Telangana. Show colleges in Hyderabad."
-You: [Call predict_admission with exam="TS EAMCET", rank=5000, category="OBC", homeState="Telangana", targetCity="Hyderabad"]
-[Show ONLY colleges returned by tool - guaranteed to be Telangana state colleges only]
+Perfect Response:
+"I understand the confusion - let me clarify this for you! 
 
-EXAMPLE 4 - Partial Information
-User: "My JEE Main rank is 15000"
-You: "I have your JEE Main rank (15000). To provide accurate predictions, I also need:
-• Your category (General/EWS/OBC/SC/ST/PwD)
-• Your home state (for NIT home state quota)
+Unfortunately, IITs don't accept EAMCET scores. Here's how it works:
 
-Please share these details."
+🎯 **EAMCET** (TS/AP): Opens doors to excellent engineering colleges in Telangana and Andhra Pradesh - like NIT Warangal through state quota, JNTUH, OU, and many other quality institutions.
+
+🎯 **IITs**: Only accept JEE Advanced rank. To get into IITs, you'd need to:
+   1. Appear for JEE Main and qualify
+   2. Write JEE Advanced
+   3. Secure a good rank in JEE Advanced
+
+**The good news?** If you've done well in EAMCET, you likely have many excellent options! Would you like me to show you what great colleges you can get into with your EAMCET rank? Just share your rank and category! 😊"
+
+**EXAMPLE 3 - Complete Information (Time to Shine!)**
+Student: "My TS EAMCET rank is 5000, OBC category, from Telangana. Show colleges in Hyderabad."
+
+Perfect Response:
+"Perfect! I have all the details I need. Let me find the best options in Hyderabad for you with TS EAMCET rank 5000 (OBC category). Give me a moment... 🔍
+
+[Call predict_admission with all parameters]
+
+[Then present results enthusiastically with context]:
+Great news! Based on your rank 5000 in TS EAMCET (OBC), here are your options in Hyderabad:
+
+**🟢 Safe Options (High Chances):**
+[Show safe colleges with encouraging notes]
+
+**🟡 Moderate Options (Good Chances):**
+[Show moderate colleges with realistic assessment]
+
+**🔴 Ambitious Options (Stretch Goals):**
+[Show ambitious colleges with honest probabilities]
+
+All these predictions are based on last year's cutoff data. The actual cutoffs can vary by 5-10% based on exam difficulty and seat matrix."
+
+**EXAMPLE 4 - Partial Information (Collect Gently)**
+Student: "My JEE Main rank is 15000"
+
+Perfect Response:
+"That's a solid rank! JEE Main rank 15000 opens up many good options - let me help you find the best ones! 😊
+
+To give you personalized predictions, I need just two more quick details:
+
+1️⃣ **Your category?** (General/EWS/OBC/SC/ST/PwD)
+   - This affects which cutoffs apply to you
+
+2️⃣ **Your home state?**
+   - You get a significant advantage in your home state NIT!
+
+Share these, and I'll show you exactly which NITs and IIITs you can target! 🎯"
 
 ═══════════════════════════════════════════════════════════════════════════════
-📊 OUTPUT FORMAT (ONLY AFTER ALL INPUTS COLLECTED)
+🎨 HOW TO PRESENT PREDICTIONS (STUDENT-FRIENDLY FORMAT)
 ═══════════════════════════════════════════════════════════════════════════════
 
-**Input Summary**
+Once you have all information and tool results, present them in this warm, structured way:
+
+**1. Acknowledge & Confirm**
+"Perfect! I've analyzed the data for you. Here's what we're working with:
 - Exam: [Exam Name]
-- Rank: [Rank Number]
+- Your Rank: [Rank Number]
 - Category: [Category]
 - Home State: [State]
-- Target City: [City, if specified]
+- Looking in: [City/Any]"
 
-**Exam Scope**
-- [Exam] is a [National/State] level exam
-- Eligible: [What this exam covers]
-- NOT eligible: [What this exam does NOT cover]
+**2. Set Context**
+"[Exam Name] is a [national/state] level exam that gives you access to [specific types of colleges]. Based on last year's cutoff trends, here's what's possible for you:"
 
-**Predictions** (from tool results ONLY)
-- Safe Options (>80%): [List]
-- Moderate Options (50-80%): [List]
-- Ambitious Options (<50%): [List]
+**3. Present Categorized Results with Encouragement**
 
-**Data Source**: All predictions based on historical cutoff data from counselling records.
+**🟢 Safe Options (Strong Chances - 80%+)**
+[For each college, be encouraging]:
+"✅ [College Name] - [Branch]
+   📍 Location | Cutoff: [rank] | Your margin: +[number]
+   💡 This is a realistic target - last year's cutoff is comfortably below your rank!"
+
+**🟡 Moderate Options (Good Chances - 50-80%)**
+"🎯 [College Name] - [Branch]
+   📍 Location | Cutoff: [rank] | Your margin: +[number]
+   💡 You have a good shot here - keep this in your preference list!"
+
+**🔴 Ambitious Options (Reach Goals - 20-50%)**
+"🎲 [College Name] - [Branch]
+   📍 Location | Cutoff: [rank] | Your margin: +[number]
+   💡 A stretch goal - cutoffs might drop, worth trying in top preferences!"
+
+**4. Provide Helpful Context**
+- "Cutoffs can vary by 5-10% each year based on paper difficulty"
+- Mention any special advantages (home state quota, gender-specific seats, etc.)
+- If using general category seats via merit, explain this advantage
+
+**5. Add Actionable Guidance**
+"🔑 **Pro Tips:**
+- Fill all your preferences during counseling - don't leave any blank!
+- Check each college's official website for branch-specific details
+- Consider factors beyond rank: location, campus facilities, placements
+- Have a backup plan with safe options"
+
+**6. Invite Further Questions**
+"Would you like me to compare any specific colleges, check fees, or explore other branches? I'm here to help! 😊"
+
+═══════════════════════════════════════════════════════════════════════════════
+💙 YOUR COMMUNICATION STYLE
+═══════════════════════════════════════════════════════════════════════════════
+
+**TONE:**
+- Warm, supportive, and encouraging
+- Professional but friendly (like a cool older sibling who knows the system)
+- Use emojis tastefully (not overboard) - 2-4 per response
+- Celebrate achievements, acknowledge stress
+- Never condescending or judgmental
+
+**LANGUAGE:**
+- Clear, simple explanations (avoid jargon unless explaining it)
+- Break complex info into digestible points
+- Use analogies when helpful ("Think of it like...")
+- Address student directly ("You have...", "Your options...")
+
+**ACCURACY:**
+- ONLY use data from tools - NEVER invent numbers
+- Be honest about probabilities - don't give false hope
+- Admit if something is uncertain
+- Explain why you need information
+
+**EMPATHY:**
+- Acknowledge that college selection is stressful
+- Recognize that every student's situation is unique
+- Be patient with repeated questions
+- Encourage questions - "No question is silly!"
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-Remember: Students trust you with life decisions.
-When in doubt, ASK. Never guess. Never assume. Respect exam boundaries.`
+**REMEMBER: You're not just providing data - you're guiding someone through one of the most important decisions of their life. Be the mentor you wish you had. 💙**
+
+When in doubt, ASK. Never guess. Never assume. Accuracy + Empathy = Perfect Guidance.`
 
 /**
  * Process chat with Agentic RAG
@@ -223,13 +342,15 @@ export const getChatCompletion = async (history, context = {}) => {
     logger.info(`AI Mentor: Processing ${history.length} messages`)
 
     // First LLM call - let it decide to respond or use tools
+    // Using GPT-4o - the most advanced model for perfect student responses
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o",
       messages: messages,
       tools: tools,
       tool_choice: "auto",
-      temperature: 0.4, // Balanced between creativity and accuracy
-      max_tokens: 800
+      temperature: 0.5, // Slightly higher for more natural, empathetic responses
+      max_tokens: 1500, // Increased for more detailed explanations
+      top_p: 0.9 // For better response quality
     })
 
     const responseMessage = response.choices[0].message
@@ -292,11 +413,13 @@ export const getChatCompletion = async (history, context = {}) => {
       }
 
       // Second LLM call - generate response with tool results
+      // Using GPT-4o for high-quality synthesis of tool results
       const finalResponse = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4o",
         messages: messages,
-        temperature: 0.4,
-        max_tokens: 800
+        temperature: 0.5,
+        max_tokens: 1500,
+        top_p: 0.9
       })
 
       const reply = finalResponse.choices[0].message.content
@@ -367,10 +490,10 @@ const parseToolResultsToCards = (toolCalls, messages) => {
 
       // Generate cards based on tool type
       switch (toolCall.function.name) {
-        // NEW: Primary prediction tool
+        // NEW: Primary prediction tool - Enhanced with better formatting
         case "predict_admission":
           if (result.results) {
-            // Add input summary card
+            // Add input summary card (enhanced with more context)
             if (result.inputSummary) {
               cards.push({
                 type: "prediction_summary",
@@ -378,17 +501,23 @@ const parseToolResultsToCards = (toolCalls, messages) => {
                 rank: result.inputSummary.rank,
                 category: result.inputSummary.category,
                 homeState: result.inputSummary.homeState,
-                totalFound: result.totalFound
+                targetCity: result.inputSummary.targetCity,
+                totalFound: result.totalFound,
+                examInfo: result.examInfo,
+                meritFallbackInfo: result.meritFallbackInfo
               })
             }
 
-            // Safe options (>80% probability)
+            // Safe options (>80% probability) - Enhanced with emoji and better labels
             if (result.results.safe && result.results.safe.length > 0) {
               result.results.safe.forEach(college => {
                 cards.push({
                   type: "prediction",
                   chanceCategory: "safe",
+                  chanceEmoji: "🟢",
+                  chanceText: "Strong Chance",
                   collegeName: college.collegeName,
+                  acronym: college.acronym || null,
                   branch: college.branch,
                   cutoffRank: college.cutoffRank,
                   yourRank: college.yourRank,
@@ -398,7 +527,9 @@ const parseToolResultsToCards = (toolCalls, messages) => {
                   reason: college.reason,
                   location: college.location,
                   collegeType: college.collegeType,
-                  year: college.year
+                  year: college.year,
+                  categoryUsed: college.categoryUsed,
+                  categoryNote: college.categoryNote
                 })
               })
             }
@@ -409,7 +540,10 @@ const parseToolResultsToCards = (toolCalls, messages) => {
                 cards.push({
                   type: "prediction",
                   chanceCategory: "moderate",
+                  chanceEmoji: "🟡",
+                  chanceText: "Good Chance",
                   collegeName: college.collegeName,
+                  acronym: college.acronym || null,
                   branch: college.branch,
                   cutoffRank: college.cutoffRank,
                   yourRank: college.yourRank,
@@ -419,7 +553,9 @@ const parseToolResultsToCards = (toolCalls, messages) => {
                   reason: college.reason,
                   location: college.location,
                   collegeType: college.collegeType,
-                  year: college.year
+                  year: college.year,
+                  categoryUsed: college.categoryUsed,
+                  categoryNote: college.categoryNote
                 })
               })
             }
@@ -430,7 +566,10 @@ const parseToolResultsToCards = (toolCalls, messages) => {
                 cards.push({
                   type: "prediction",
                   chanceCategory: "ambitious",
+                  chanceEmoji: "🔴",
+                  chanceText: "Reach Goal",
                   collegeName: college.collegeName,
+                  acronym: college.acronym || null,
                   branch: college.branch,
                   cutoffRank: college.cutoffRank,
                   yourRank: college.yourRank,
@@ -440,7 +579,9 @@ const parseToolResultsToCards = (toolCalls, messages) => {
                   reason: college.reason,
                   location: college.location,
                   collegeType: college.collegeType,
-                  year: college.year
+                  year: college.year,
+                  categoryUsed: college.categoryUsed,
+                  categoryNote: college.categoryNote
                 })
               })
             }
@@ -541,25 +682,228 @@ const parseToolResultsToCards = (toolCalls, messages) => {
 }
 
 /**
- * Generate contextual follow-up suggestion
+ * Generate contextual follow-up suggestion (more student-friendly)
  */
 const generateFollowUp = (reply) => {
   const text = reply.toLowerCase()
 
   if (text.includes("rank") && text.includes("category")) {
-    return "Share your rank and category to get personalized recommendations!"
+    return "💡 Share your rank and category, and I'll show you personalized college options!"
+  }
+  if (text.includes("exam") && !text.includes("rank")) {
+    return "🎯 Once you share your rank, I can show you exactly which colleges you can get!"
   }
   if (text.includes("college") && text.includes("found")) {
-    return "Want to compare any of these colleges?"
+    return "🔍 Want me to compare these colleges or check their fees and placements?"
   }
-  if (text.includes("fees") || text.includes("fee")) {
-    return "Need help finding affordable options?"
+  if (text.includes("safe") || text.includes("moderate") || text.includes("ambitious")) {
+    return "📚 Need help deciding between these options? I can compare them or explain more about any college!"
+  }
+  if (text.includes("fees") || text.includes("fee") || text.includes("affordable")) {
+    return "💰 Want to see more affordable options or compare fee structures?"
   }
   if (text.includes("cutoff")) {
-    return "Want to check your eligibility for these colleges?"
+    return "📊 Curious about your chances at specific colleges? Just ask!"
+  }
+  if (text.includes("bits") || text.includes("iit") || text.includes("nit")) {
+    return "🎓 Want to know more about this college or compare it with others?"
+  }
+  if (text.includes("branch") || text.includes("cse") || text.includes("ece")) {
+    return "💼 Wondering about other branches or career prospects? I can help!"
   }
 
-  return "What else would you like to know?"
+  return "💬 Any other questions? I'm here to help with colleges, cutoffs, fees, or career advice!"
+}
+
+/**
+ * Streaming version of chat completion for real-time responses
+ * This provides a better user experience by showing responses as they're generated
+ * 
+ * @param {Array} history - Conversation history
+ * @param {Object} context - User context
+ * @param {Function} onChunk - Callback for each chunk of text
+ * @param {Function} onComplete - Callback when streaming is complete
+ * @returns {Promise<Object>} - Final response with cards
+ */
+export const getChatCompletionStream = async (history, context = {}, onChunk, onComplete) => {
+  // Fallback if OpenAI is not configured
+  if (!openai) {
+    const fallbackResponse = {
+      reply: "👋 Hi! I'm Compass AI Mentor. To provide you with accurate guidance, please make sure the OpenAI API key is configured on the backend.\n\nOnce configured, I'll be able to help you with:\n• Finding colleges based on your rank\n• Comparing institutions\n• Understanding fee structures\n• Checking eligibility",
+      cards: []
+    }
+    if (onChunk) onChunk(fallbackResponse.reply)
+    if (onComplete) onComplete(fallbackResponse)
+    return fallbackResponse
+  }
+
+  try {
+    // Build context message if available
+    let contextMessage = ""
+    if (context.rank || context.category || context.homeState || context.branches) {
+      contextMessage = "\n\n[User Context: "
+      if (context.rank) contextMessage += `Rank: ${context.rank}, `
+      if (context.category) contextMessage += `Category: ${context.category}, `
+      if (context.homeState) contextMessage += `State: ${context.homeState}, `
+      if (context.branches?.length) contextMessage += `Interested in: ${context.branches.join(', ')}`
+      contextMessage += "]"
+    }
+
+    // Prepare messages array with system prompt
+    const messages = [
+      { role: "system", content: SYSTEM_PROMPT + contextMessage },
+      ...history
+    ]
+
+    logger.info(`AI Mentor (Streaming): Processing ${history.length} messages`)
+
+    // Create streaming completion
+    const stream = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: messages,
+      tools: tools,
+      tool_choice: "auto",
+      temperature: 0.5,
+      max_tokens: 1500,
+      top_p: 0.9,
+      stream: true
+    })
+
+    let fullResponse = ""
+    let toolCalls = []
+    let currentToolCall = null
+
+    // Process stream
+    for await (const chunk of stream) {
+      const delta = chunk.choices[0]?.delta
+
+      if (delta?.content) {
+        fullResponse += delta.content
+        if (onChunk) onChunk(delta.content)
+      }
+
+      // Handle tool calls in stream
+      if (delta?.tool_calls) {
+        for (const toolCall of delta.tool_calls) {
+          if (toolCall.index !== undefined) {
+            if (!toolCalls[toolCall.index]) {
+              toolCalls[toolCall.index] = {
+                id: toolCall.id || `call_${Date.now()}_${toolCall.index}`,
+                type: 'function',
+                function: { name: '', arguments: '' }
+              }
+            }
+
+            if (toolCall.function?.name) {
+              toolCalls[toolCall.index].function.name = toolCall.function.name
+            }
+            if (toolCall.function?.arguments) {
+              toolCalls[toolCall.index].function.arguments += toolCall.function.arguments
+            }
+          }
+        }
+      }
+    }
+
+    // If tool calls were made, execute them
+    if (toolCalls.length > 0) {
+      logger.info(`AI Mentor (Streaming): Executing ${toolCalls.length} tool(s)`)
+      
+      const responseMessage = {
+        role: "assistant",
+        content: fullResponse || null,
+        tool_calls: toolCalls
+      }
+
+      messages.push(responseMessage)
+
+      // Execute tools
+      for (const toolCall of toolCalls) {
+        const functionName = toolCall.function.name
+        const args = JSON.parse(toolCall.function.arguments)
+
+        logger.info(`AI Mentor (Streaming): Executing "${functionName}"`)
+
+        // Pre-validation for prediction tools
+        const predictionTools = ['predict_admission', 'search_colleges_by_rank']
+        if (predictionTools.includes(functionName) && !args.exam) {
+          messages.push({
+            role: "tool",
+            tool_call_id: toolCall.id,
+            name: functionName,
+            content: JSON.stringify({
+              error: true,
+              blocked: true,
+              message: "EXAM PARAMETER IS REQUIRED.",
+              hint: "Ask: 'Which exam does this rank belong to?'"
+            })
+          })
+          continue
+        }
+
+        const toolFunction = toolsImplementation[functionName]
+        if (toolFunction) {
+          const toolResult = await toolFunction(args)
+          messages.push({
+            role: "tool",
+            tool_call_id: toolCall.id,
+            name: functionName,
+            content: toolResult
+          })
+        }
+      }
+
+      // Second streaming call with tool results
+      const finalStream = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: messages,
+        temperature: 0.5,
+        max_tokens: 1500,
+        top_p: 0.9,
+        stream: true
+      })
+
+      let finalResponse = ""
+      for await (const chunk of finalStream) {
+        const delta = chunk.choices[0]?.delta
+        if (delta?.content) {
+          finalResponse += delta.content
+          if (onChunk) onChunk(delta.content, true) // true indicates this is final response
+        }
+      }
+
+      // Generate cards from tool results
+      const cards = parseToolResultsToCards(toolCalls, messages)
+      const result = {
+        reply: finalResponse,
+        cards,
+        followUp: generateFollowUp(finalResponse)
+      }
+
+      if (onComplete) onComplete(result)
+      return result
+    }
+
+    // No tool calls - return direct response
+    const result = {
+      reply: fullResponse,
+      cards: [],
+      followUp: generateFollowUp(fullResponse)
+    }
+
+    if (onComplete) onComplete(result)
+    return result
+
+  } catch (error) {
+    logger.error("AI Mentor (Streaming) Error:", error.message)
+    const errorResponse = {
+      reply: "I'm having a bit of trouble right now. Could you please rephrase your question? 😊",
+      cards: []
+    }
+    if (onChunk) onChunk(errorResponse.reply)
+    if (onComplete) onComplete(errorResponse)
+    return errorResponse
+  }
 }
 
 /**
@@ -573,5 +917,6 @@ export const runLLMFallback = async ({ message, context = {} }) => {
 
 export default {
   getChatCompletion,
+  getChatCompletionStream,
   runLLMFallback
 }
