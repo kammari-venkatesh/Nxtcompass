@@ -91,14 +91,23 @@ export const useMentor = () => {
       } catch (error) {
         console.error("AI Mentor Error:", error)
 
-        // Error message
+        // Check if this is a network error or API error
+        const isNetworkError = !error.response
+        const is500Error = error.response?.status === 500
+        
+        // Friendly error message with auto-retry logic
         const errorMessage = {
           id: Date.now() + 1,
           role: "bot",
-          text: "I'm having trouble connecting right now. Please try again in a moment.",
+          text: isNetworkError 
+            ? "🌐 Hmm, my mentor-brain is having trouble reaching the network. Let me try to reconnect for you..."
+            : is500Error
+            ? "🔄 My mentor-brain encountered something unexpected. Give me a moment to recalibrate..."
+            : "💙 I'm having a bit of trouble connecting right now. Could you try asking that again? I promise I'm here to help!",
           cards: [],
           timestamp: new Date(),
           sentiment: "empathetic",
+          isRetrying: isNetworkError || is500Error
         }
 
         setMessages((prev) => {
@@ -106,6 +115,48 @@ export const useMentor = () => {
           messagesRef.current = updated
           return updated
         })
+
+        // Auto-retry logic for network errors (max 2 retries)
+        if (isNetworkError || is500Error) {
+          setTimeout(async () => {
+            try {
+              console.log("🔄 Auto-retrying request...")
+              const history = formatHistoryForAPI(messagesRef.current)
+              const retryResponse = await sendChatMessage(null, context, history)
+              
+              // Remove the retry message and add the successful response
+              const retryBotMessage = {
+                id: Date.now() + 2,
+                role: "bot",
+                text: "✨ Got it! " + retryResponse.reply,
+                cards: retryResponse.cards || [],
+                followUp: retryResponse.followUp,
+                timestamp: new Date(),
+                sentiment: detectSentiment(retryResponse.reply, userMessage),
+              }
+
+              setMessages((prev) => {
+                // Remove the retry message and add success
+                const withoutRetry = prev.filter(m => !m.isRetrying)
+                const updated = [...withoutRetry, retryBotMessage]
+                messagesRef.current = updated
+                return updated
+              })
+            } catch (retryError) {
+              console.error("Retry failed:", retryError)
+              // Update message to show retry failed
+              setMessages((prev) => {
+                const updated = prev.map(m => 
+                  m.isRetrying 
+                    ? { ...m, text: "😔 I tried reconnecting, but it's not working right now. Could you check your internet connection and try again? I'm still here when you're ready!", isRetrying: false }
+                    : m
+                )
+                messagesRef.current = updated
+                return updated
+              })
+            }
+          }, 2000) // Retry after 2 seconds
+        }
       } finally {
         setIsTyping(false)
       }

@@ -92,6 +92,19 @@ const ZenithMentor = () => {
     }
   }
 
+  const getMoodEmoji = (mood) => {
+    const moodEmojis = {
+      lowConfidence: '💙',
+      urgency: '⏰',
+      confusion: '💡',
+      excitement: '🎉',
+      gratitude: '🙏',
+      determination: '💪',
+      neutral: '😊'
+    }
+    return moodEmojis[mood] || '😊'
+  }
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, isTyping])
@@ -379,6 +392,40 @@ const ZenithMentor = () => {
                           </div>
                         )
                       })}
+                    </div>
+                  )}
+
+                  {/* Zenith Action Card */}
+                  {msg.actionCard && (
+                    <div className="zenith-action-card">
+                      <div className="zenith-action-card-header">
+                        <span className="zenith-action-card-title">Your Next Steps</span>
+                        <span className="zenith-action-card-mood">{getMoodEmoji(msg.actionCard.mood)}</span>
+                      </div>
+                      
+                      {msg.actionCard.validation && (
+                        <div className="zenith-action-card-validation">
+                          💙 {msg.actionCard.validation}
+                        </div>
+                      )}
+                      
+                      <div className="zenith-action-card-steps">
+                        {msg.actionCard.nextSteps?.map((step, idx) => (
+                          <div key={idx} className="zenith-action-step">
+                            <span className="zenith-step-number">{step.emoji} {step.number}</span>
+                            <div className="zenith-step-content">
+                              <strong>{step.action}</strong>
+                              <p>{step.detail}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {msg.actionCard.inspiration && (
+                        <div className="zenith-action-card-inspiration">
+                          ✨ {msg.actionCard.inspiration}
+                        </div>
+                      )}
                     </div>
                   )}
 

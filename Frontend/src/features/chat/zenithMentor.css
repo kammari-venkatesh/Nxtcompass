@@ -1251,3 +1251,115 @@
   font-size: 13px;
   margin: 8px 0;
 }
+
+/* ========================================
+   ZENITH ACTION CARD
+   ======================================== */
+
+.zenith-action-card {
+  margin-top: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(0, 217, 255, 0.12), rgba(184, 69, 255, 0.12));
+  border: 2px solid rgba(0, 217, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 217, 255, 0.2);
+}
+
+.zenith-action-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.zenith-action-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #00d9ff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.zenith-action-card-mood {
+  font-size: 24px;
+}
+
+.zenith-action-card-validation {
+  padding: 14px 16px;
+  background: rgba(0, 217, 255, 0.12);
+  border-left: 4px solid #00d9ff;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+}
+
+.zenith-action-card-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.zenith-action-step {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.zenith-action-step:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 217, 255, 0.3);
+  transform: translateX(4px);
+}
+
+.zenith-step-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: #00d9ff;
+  min-width: 35px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.zenith-step-content {
+  flex: 1;
+}
+
+.zenith-step-content strong {
+  display: block;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.zenith-step-content p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.zenith-action-card-inspiration {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(184, 69, 255, 0.15), rgba(255, 107, 237, 0.15));
+  border: 1px solid rgba(184, 69, 255, 0.3);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #b845ff;
+  text-align: center;
+  font-style: italic;
+  box-shadow: 0 4px 16px rgba(184, 69, 255, 0.2);
+}
