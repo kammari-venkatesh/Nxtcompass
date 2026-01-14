@@ -1,4 +1,5 @@
 import { getChatCompletion } from "../services/llm.service.js"
+import { getClaudeChatCompletion, isAvailable as isClaudeAvailable } from "../services/claude.service.js"
 import { runAICounselor } from "../services/ai.service.js"
 import logger from "../utils/logger.js"
 
@@ -48,6 +49,10 @@ export const chatWithAI = async (req, res, next) => {
 
     let response
 
+    // Determine which LLM service to use
+    // Priority: Claude 3.5 Sonnet (if available) > GPT-4o > Rule-based
+    const preferredModel = req.body.model || process.env.PREFERRED_MODEL || 'auto'
+    
     // Check if using Agentic RAG mode (with history)
     if (history && Array.isArray(history) && history.length > 0) {
       logger.info(`Chat API: Agentic RAG mode with ${history.length} messages`)
@@ -65,18 +70,52 @@ export const chatWithAI = async (req, res, next) => {
         })
       }
 
-      // Use Agentic RAG with full conversation history
-      response = await getChatCompletion(history, context || {})
+      // Model selection logic
+      try {
+        if (preferredModel === 'claude' && isClaudeAvailable()) {
+          logger.info("Using Claude 3.5 Sonnet for empathetic responses")
+          response = await getClaudeChatCompletion(history, context || {})
+        } else if (preferredModel === 'auto') {
+          // Auto-select: Claude if available, else GPT-4o
+          if (isClaudeAvailable()) {
+            logger.info("Auto-selected: Claude 3.5 Sonnet (best for empathy)")
+            response = await getClaudeChatCompletion(history, context || {})
+          } else {
+            logger.info("Auto-selected: GPT-4o (Claude not available)")
+            response = await getChatCompletion(history, context || {})
+          }
+        } else {
+          // Default to GPT-4o
+          logger.info("Using GPT-4o")
+          response = await getChatCompletion(history, context || {})
+        }
+      } catch (llmError) {
+        logger.error("LLM Error:", llmError.message)
+        // Fall back to rule-based AI counselor
+        logger.info("Falling back to rule-based AI counselor")
+        const lastMessage = history[history.length - 1]
+        response = await runAICounselor({ 
+          message: lastMessage?.content || '', 
+          context: context || {} 
+        })
+      }
     } else {
       // Legacy mode - single message
       logger.info("Chat API: Legacy single message mode")
 
-      // Try Agentic RAG first, fall back to rule-based if needed
+      // Try LLM services first, fall back to rule-based if needed
       try {
         const singleMessageHistory = [{ role: "user", content: message }]
-        response = await getChatCompletion(singleMessageHistory, context || {})
+        
+        if (preferredModel === 'claude' && isClaudeAvailable()) {
+          response = await getClaudeChatCompletion(singleMessageHistory, context || {})
+        } else if (preferredModel === 'auto' && isClaudeAvailable()) {
+          response = await getClaudeChatCompletion(singleMessageHistory, context || {})
+        } else {
+          response = await getChatCompletion(singleMessageHistory, context || {})
+        }
       } catch (error) {
-        logger.warn("Agentic RAG failed, falling back to rule-based:", error.message)
+        logger.warn("LLM failed, falling back to rule-based:", error.message)
         response = await runAICounselor({ message, context: context || {} })
       }
     }
@@ -86,6 +125,9 @@ export const chatWithAI = async (req, res, next) => {
       reply: response.reply,
       cards: response.cards || [],
       followUp: response.followUp || null,
+      actionCard: response.actionCard || null,
+      emotionalAnalysis: response.emotionalAnalysis || null,
+      model: isClaudeAvailable() && preferredModel !== 'openai' ? 'claude-3.5-sonnet' : 'gpt-4o'
     })
   } catch (error) {
     logger.error("Chat Controller Error:", error.message)
