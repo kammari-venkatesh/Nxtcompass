@@ -48,6 +48,7 @@ export const chatWithAI = async (req, res, next) => {
     }
 
     let response
+    let actualModelUsed = 'rule-based' // Track which service actually responded
 
     // Determine which LLM service to use
     // Priority: Claude 3.5 Sonnet (if available) > GPT-4o > Rule-based
@@ -75,19 +76,23 @@ export const chatWithAI = async (req, res, next) => {
         if (preferredModel === 'claude' && claudeService.isAvailable()) {
           logger.info("Using Claude 3.5 Sonnet for empathetic responses")
           response = await claudeService.getClaudeChatCompletion(history, context || {})
+          actualModelUsed = 'claude-3.5-sonnet'
         } else if (preferredModel === 'auto') {
           // Auto-select: Claude if available, else GPT-4o
           if (claudeService.isAvailable()) {
             logger.info("Auto-selected: Claude 3.5 Sonnet (best for empathy)")
             response = await claudeService.getClaudeChatCompletion(history, context || {})
+            actualModelUsed = 'claude-3.5-sonnet'
           } else {
             logger.info("Auto-selected: GPT-4o (Claude not available)")
             response = await getChatCompletion(history, context || {})
+            actualModelUsed = 'gpt-4o'
           }
         } else {
           // Default to GPT-4o
           logger.info("Using GPT-4o")
           response = await getChatCompletion(history, context || {})
+          actualModelUsed = 'gpt-4o'
         }
       } catch (llmError) {
         logger.error("LLM Error:", llmError.message)
@@ -98,6 +103,7 @@ export const chatWithAI = async (req, res, next) => {
           message: lastMessage?.content || '', 
           context: context || {} 
         })
+        actualModelUsed = 'rule-based'
       }
     } else {
       // Legacy mode - single message
@@ -109,14 +115,18 @@ export const chatWithAI = async (req, res, next) => {
         
         if (preferredModel === 'claude' && claudeService.isAvailable()) {
           response = await claudeService.getClaudeChatCompletion(singleMessageHistory, context || {})
+          actualModelUsed = 'claude-3.5-sonnet'
         } else if (preferredModel === 'auto' && claudeService.isAvailable()) {
           response = await claudeService.getClaudeChatCompletion(singleMessageHistory, context || {})
+          actualModelUsed = 'claude-3.5-sonnet'
         } else {
           response = await getChatCompletion(singleMessageHistory, context || {})
+          actualModelUsed = 'gpt-4o'
         }
       } catch (error) {
         logger.warn("LLM failed, falling back to rule-based:", error.message)
         response = await runAICounselor({ message, context: context || {} })
+        actualModelUsed = 'rule-based'
       }
     }
 
@@ -127,7 +137,7 @@ export const chatWithAI = async (req, res, next) => {
       followUp: response.followUp || null,
       actionCard: response.actionCard || null,
       emotionalAnalysis: response.emotionalAnalysis || null,
-      model: claudeService.isAvailable() && preferredModel !== 'openai' ? 'claude-3.5-sonnet' : 'gpt-4o'
+      model: actualModelUsed // Report the actual model that generated this response
     })
   } catch (error) {
     logger.error("Chat Controller Error:", error.message)

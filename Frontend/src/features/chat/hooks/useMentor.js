@@ -80,6 +80,7 @@ export const useMentor = () => {
           text: response.reply,
           cards: response.cards || [],
           followUp: response.followUp,
+          actionCard: response.actionCard, // Add action card for Zenith UI
           timestamp: new Date(),
           sentiment: sentiment,
         }
@@ -132,6 +133,7 @@ export const useMentor = () => {
                 text: "✨ Got it! " + retryResponse.reply,
                 cards: retryResponse.cards || [],
                 followUp: retryResponse.followUp,
+                actionCard: retryResponse.actionCard, // Add action card on retry too
                 timestamp: new Date(),
                 sentiment: detectSentiment(retryResponse.reply, userMessage),
               }

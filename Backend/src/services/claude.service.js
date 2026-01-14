@@ -208,27 +208,86 @@ export const getClaudeChatCompletion = async (history, context = {}) => {
 
     logger.info(`Claude: Processing ${messages.length} messages with ${emotionalAnalysis.emotion} emotion`)
 
-    // Call Claude 3.5 Sonnet
+    // Convert OpenAI tools format to Anthropic tools format
+    const claudeTools = tools.map(tool => ({
+      name: tool.function.name,
+      description: tool.function.description,
+      input_schema: {
+        type: "object",
+        properties: tool.function.parameters.properties,
+        required: tool.function.parameters.required || []
+      }
+    }))
+
+    // Call Claude 3.5 Sonnet with tool support
     const response = await anthropic.messages.create({
       model: "claude-3-5-sonnet-20241022",
       max_tokens: 1500,
       temperature: 0.6, // Slightly higher for more empathetic responses
       system: CLAUDE_SYSTEM_PROMPT + contextMessage + emotionalContext,
-      messages: messages
+      messages: messages,
+      tools: claudeTools // Enable function calling for college data
     })
 
-    const reply = response.content[0].text
+    // Check if Claude wants to use tools
+    let finalReply = ''
+    let toolResults = []
+    
+    // Process response content
+    for (const content of response.content) {
+      if (content.type === 'text') {
+        finalReply += content.text
+      } else if (content.type === 'tool_use') {
+        logger.info(`Claude requesting tool: ${content.name}`)
+        
+        // Execute the tool
+        const toolFunction = toolsImplementation[content.name]
+        if (!toolFunction) {
+          logger.error(`Tool not found for Claude: ${content.name}`)
+          continue
+        }
+        
+        const toolResult = await toolFunction(content.input)
+        toolResults.push({
+          type: "tool_result",
+          tool_use_id: content.id,
+          content: toolResult
+        })
+      }
+    }
+
+    // If tools were called, make a second API call with results
+    if (toolResults.length > 0) {
+      messages.push({
+        role: "assistant",
+        content: response.content
+      })
+      messages.push({
+        role: "user",
+        content: toolResults
+      })
+
+      const finalResponse = await anthropic.messages.create({
+        model: "claude-3-5-sonnet-20241022",
+        max_tokens: 1500,
+        temperature: 0.6,
+        system: CLAUDE_SYSTEM_PROMPT + contextMessage + emotionalContext,
+        messages: messages
+      })
+
+      finalReply = finalResponse.content[0].text
+    }
 
     // Generate micro-steps
     const nextSteps = generateMicroSteps(context, [])
 
     // Create Zenith Action Card
-    const actionCard = createZenithActionCard(emotionalAnalysis, reply, nextSteps)
+    const actionCard = createZenithActionCard(emotionalAnalysis, finalReply, nextSteps)
 
     return {
-      reply,
-      cards: [],
-      followUp: generateFollowUp(reply, emotionalAnalysis.emotion),
+      reply: finalReply,
+      cards: [], // TODO: Parse tool results to cards like OpenAI service does
+      followUp: generateFollowUp(finalReply, emotionalAnalysis.emotion),
       actionCard,
       emotionalAnalysis
     }
