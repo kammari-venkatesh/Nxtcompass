@@ -53,21 +53,22 @@ export const useMentor = () => {
       // Start typing indicator
       setIsTyping(true)
 
+      // Prepare context from UserContext (moved outside try for retry access)
+      const requestContext = {
+        rank: userContext?.rank,
+        category: userContext?.category,
+        homeState: userContext?.homeState,
+        branches: userContext?.branches,
+      }
+
       try {
-        // Prepare context from UserContext
-        const context = {
-          rank: userContext?.rank,
-          category: userContext?.category,
-          homeState: userContext?.homeState,
-          branches: userContext?.branches,
-        }
 
         // Format full conversation history for API (including the new message)
         const allMessages = [...messagesRef.current]
         const history = formatHistoryForAPI(allMessages)
 
         // Call backend with full history for Agentic RAG
-        const response = await sendChatMessage(null, context, history)
+        const response = await sendChatMessage(null, requestContext, history)
 
         // Detect sentiment from AI response for avatar mood
         const sentiment = detectSentiment(response.reply, userMessage)
@@ -122,7 +123,7 @@ export const useMentor = () => {
             try {
               console.log("🔄 Auto-retrying request...")
               const history = formatHistoryForAPI(messagesRef.current)
-              const retryResponse = await sendChatMessage(null, context, history)
+              const retryResponse = await sendChatMessage(null, requestContext, history)
               
               // Remove the retry message and add the successful response
               const retryBotMessage = {
