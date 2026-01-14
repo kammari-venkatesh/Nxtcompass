@@ -841,16 +841,30 @@ export const getChatCompletionStream = async (history, context = {}, onChunk, on
           continue
         }
 
+        // Execute the tool
         const toolFunction = toolsImplementation[functionName]
-        if (toolFunction) {
-          const toolResult = await toolFunction(args)
+        if (!toolFunction) {
+          logger.error(`Tool not found in streaming mode: ${functionName}`)
+          // Add error response to messages so LLM knows the tool failed
           messages.push({
             role: "tool",
             tool_call_id: toolCall.id,
             name: functionName,
-            content: toolResult
+            content: JSON.stringify({
+              error: true,
+              message: `Tool "${functionName}" is not available or not implemented.`
+            })
           })
+          continue
         }
+
+        const toolResult = await toolFunction(args)
+        messages.push({
+          role: "tool",
+          tool_call_id: toolCall.id,
+          name: functionName,
+          content: toolResult
+        })
       }
 
       // Second streaming call with tool results
