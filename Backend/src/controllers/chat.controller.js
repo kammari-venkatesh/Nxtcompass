@@ -1,5 +1,5 @@
 import { getChatCompletion } from "../services/llm.service.js"
-import { getClaudeChatCompletion, isAvailable as isClaudeAvailable } from "../services/claude.service.js"
+import claudeService from "../services/claude.service.js"
 import { runAICounselor } from "../services/ai.service.js"
 import logger from "../utils/logger.js"
 
@@ -72,14 +72,14 @@ export const chatWithAI = async (req, res, next) => {
 
       // Model selection logic
       try {
-        if (preferredModel === 'claude' && isClaudeAvailable()) {
+        if (preferredModel === 'claude' && claudeService.isAvailable()) {
           logger.info("Using Claude 3.5 Sonnet for empathetic responses")
-          response = await getClaudeChatCompletion(history, context || {})
+          response = await claudeService.getClaudeChatCompletion(history, context || {})
         } else if (preferredModel === 'auto') {
           // Auto-select: Claude if available, else GPT-4o
-          if (isClaudeAvailable()) {
+          if (claudeService.isAvailable()) {
             logger.info("Auto-selected: Claude 3.5 Sonnet (best for empathy)")
-            response = await getClaudeChatCompletion(history, context || {})
+            response = await claudeService.getClaudeChatCompletion(history, context || {})
           } else {
             logger.info("Auto-selected: GPT-4o (Claude not available)")
             response = await getChatCompletion(history, context || {})
@@ -107,10 +107,10 @@ export const chatWithAI = async (req, res, next) => {
       try {
         const singleMessageHistory = [{ role: "user", content: message }]
         
-        if (preferredModel === 'claude' && isClaudeAvailable()) {
-          response = await getClaudeChatCompletion(singleMessageHistory, context || {})
-        } else if (preferredModel === 'auto' && isClaudeAvailable()) {
-          response = await getClaudeChatCompletion(singleMessageHistory, context || {})
+        if (preferredModel === 'claude' && claudeService.isAvailable()) {
+          response = await claudeService.getClaudeChatCompletion(singleMessageHistory, context || {})
+        } else if (preferredModel === 'auto' && claudeService.isAvailable()) {
+          response = await claudeService.getClaudeChatCompletion(singleMessageHistory, context || {})
         } else {
           response = await getChatCompletion(singleMessageHistory, context || {})
         }
@@ -127,7 +127,7 @@ export const chatWithAI = async (req, res, next) => {
       followUp: response.followUp || null,
       actionCard: response.actionCard || null,
       emotionalAnalysis: response.emotionalAnalysis || null,
-      model: isClaudeAvailable() && preferredModel !== 'openai' ? 'claude-3.5-sonnet' : 'gpt-4o'
+      model: claudeService.isAvailable() && preferredModel !== 'openai' ? 'claude-3.5-sonnet' : 'gpt-4o'
     })
   } catch (error) {
     logger.error("Chat Controller Error:", error.message)
