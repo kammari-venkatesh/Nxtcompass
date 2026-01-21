@@ -4,6 +4,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://nxtcompass06.onren
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 90000, // 90s to tolerate Render.com cold start (~30-60s); avoids fail-then-retry when server is waking
   headers: {
     'Content-Type': 'application/json'
   }
@@ -53,5 +54,16 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+/**
+ * Fire-and-forget request to /health to wake Render.com before first chat request.
+ * Call when Mentor UI mounts to reduce cold-start failures on first message.
+ */
+export const wakeBackend = () => {
+  try {
+    const origin = new URL(API_BASE_URL).origin;
+    fetch(`${origin}/health`).catch(() => {});
+  } catch { /* ignore URL/fetch errors */ }
+};
 
 export default api;

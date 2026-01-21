@@ -1,5 +1,6 @@
 import { getChatCompletion } from "../services/llm.service.js"
 import claudeService from "../services/claude.service.js"
+import groqService from "../services/groq.service.js"
 import { runAICounselor } from "../services/ai.service.js"
 import logger from "../utils/logger.js"
 
@@ -51,7 +52,7 @@ export const chatWithAI = async (req, res, next) => {
     let actualModelUsed = 'rule-based' // Track which service actually responded
 
     // Determine which LLM service to use
-    // Priority: Claude 3.5 Sonnet (if available) > GPT-4o > Rule-based
+    // Priority: Groq (FREE!) > Claude ($$) > GPT-4o ($$) > Rule-based
     const preferredModel = req.body.model || process.env.PREFERRED_MODEL || 'auto'
     
     // Check if using Agentic RAG mode (with history)
@@ -71,26 +72,38 @@ export const chatWithAI = async (req, res, next) => {
         })
       }
 
-      // Model selection logic
+      // Model selection logic with FREE Groq priority
       try {
-        if (preferredModel === 'claude' && claudeService.isAvailable()) {
+        if (preferredModel === 'groq' && groqService.isAvailable()) {
+          logger.info("Using Groq (Llama 3.1 70B) - FREE!")
+          response = await groqService.getGroqChatCompletion(history, context || {})
+          actualModelUsed = 'groq-llama-3.1-70b'
+        } else if (preferredModel === 'claude' && claudeService.isAvailable()) {
           logger.info("Using Claude 3.5 Sonnet for empathetic responses")
           response = await claudeService.getClaudeChatCompletion(history, context || {})
           actualModelUsed = 'claude-3.5-sonnet'
+        } else if (preferredModel === 'openai' || preferredModel === 'gpt-4o') {
+          logger.info("Using GPT-4o")
+          response = await getChatCompletion(history, context || {})
+          actualModelUsed = 'gpt-4o'
         } else if (preferredModel === 'auto') {
-          // Auto-select: Claude if available, else GPT-4o
-          if (claudeService.isAvailable()) {
-            logger.info("Auto-selected: Claude 3.5 Sonnet (best for empathy)")
+          // Auto-select: Groq (FREE!) > Claude > GPT-4o
+          if (groqService.isAvailable()) {
+            logger.info("🎉 Auto-selected: Groq (FREE - Llama 3.1 70B)")
+            response = await groqService.getGroqChatCompletion(history, context || {})
+            actualModelUsed = 'groq-llama-3.1-70b'
+          } else if (claudeService.isAvailable()) {
+            logger.info("Auto-selected: Claude 3.5 Sonnet")
             response = await claudeService.getClaudeChatCompletion(history, context || {})
             actualModelUsed = 'claude-3.5-sonnet'
           } else {
-            logger.info("Auto-selected: GPT-4o (Claude not available)")
+            logger.info("Auto-selected: GPT-4o")
             response = await getChatCompletion(history, context || {})
             actualModelUsed = 'gpt-4o'
           }
         } else {
-          // Default to GPT-4o
-          logger.info("Using GPT-4o")
+          // Default fallback
+          logger.info("Using GPT-4o (default)")
           response = await getChatCompletion(history, context || {})
           actualModelUsed = 'gpt-4o'
         }
@@ -113,12 +126,24 @@ export const chatWithAI = async (req, res, next) => {
       try {
         const singleMessageHistory = [{ role: "user", content: message }]
         
-        if (preferredModel === 'claude' && claudeService.isAvailable()) {
+        if (preferredModel === 'groq' && groqService.isAvailable()) {
+          response = await groqService.getGroqChatCompletion(singleMessageHistory, context || {})
+          actualModelUsed = 'groq-llama-3.1-70b'
+        } else if (preferredModel === 'claude' && claudeService.isAvailable()) {
           response = await claudeService.getClaudeChatCompletion(singleMessageHistory, context || {})
           actualModelUsed = 'claude-3.5-sonnet'
-        } else if (preferredModel === 'auto' && claudeService.isAvailable()) {
-          response = await claudeService.getClaudeChatCompletion(singleMessageHistory, context || {})
-          actualModelUsed = 'claude-3.5-sonnet'
+        } else if (preferredModel === 'auto') {
+          // Auto-select FREE option first
+          if (groqService.isAvailable()) {
+            response = await groqService.getGroqChatCompletion(singleMessageHistory, context || {})
+            actualModelUsed = 'groq-llama-3.1-70b'
+          } else if (claudeService.isAvailable()) {
+            response = await claudeService.getClaudeChatCompletion(singleMessageHistory, context || {})
+            actualModelUsed = 'claude-3.5-sonnet'
+          } else {
+            response = await getChatCompletion(singleMessageHistory, context || {})
+            actualModelUsed = 'gpt-4o'
+          }
         } else {
           response = await getChatCompletion(singleMessageHistory, context || {})
           actualModelUsed = 'gpt-4o'

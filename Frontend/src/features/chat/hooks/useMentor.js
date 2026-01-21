@@ -1,6 +1,7 @@
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import { sendChatMessage } from "../../../services/chat.service"
 import { useUserContext } from "../../../hooks/useUserContext"
+import { wakeBackend } from "../../../services/api"
 
 /**
  * useMentor Hook - Manages Zenith AI Mentor conversation state
@@ -16,6 +17,9 @@ export const useMentor = () => {
   const [isTyping, setIsTyping] = useState(false)
   const { context: userContext } = useUserContext()
   const messagesRef = useRef([])
+
+  // Pre-wake backend when Mentor UI mounts to reduce cold-start failures on first message (Render.com)
+  useEffect(() => { wakeBackend(); }, [])
 
   /**
    * Convert internal messages to API format
@@ -91,12 +95,15 @@ export const useMentor = () => {
           return updated
         })
       } catch (error) {
-        console.error("AI Mentor Error:", error)
-
         // Check if this is a network error or API error
         const isNetworkError = !error.response
         const is500Error = error.response?.status === 500
-        
+        if (isNetworkError || is500Error) {
+          console.warn("AI Mentor: first request failed (retrying):", error?.message || error);
+        } else {
+          console.error("AI Mentor Error:", error);
+        }
+
         // Friendly error message with auto-retry logic
         const errorMessage = {
           id: Date.now() + 1,
@@ -120,45 +127,65 @@ export const useMentor = () => {
 
         // Auto-retry logic for network errors (max 2 retries)
         if (isNetworkError || is500Error) {
+          const retryDelayMs = isNetworkError ? 5000 : 2000; // 5s for cold start/network, 2s for 5xx
+          const doRetry = () => {
+            const history = formatHistoryForAPI(messagesRef.current);
+            return sendChatMessage(null, requestContext, history);
+          };
+          const onRetrySuccess = (retryResponse) => {
+            const retryBotMessage = {
+              id: Date.now() + 2,
+              role: "bot",
+              text: "✨ Got it! " + retryResponse.reply,
+              cards: retryResponse.cards || [],
+              followUp: retryResponse.followUp,
+              actionCard: retryResponse.actionCard,
+              timestamp: new Date(),
+              sentiment: detectSentiment(retryResponse.reply, userMessage),
+            };
+            setMessages((prev) => {
+              const withoutRetry = prev.filter(m => !m.isRetrying);
+              const updated = [...withoutRetry, retryBotMessage];
+              messagesRef.current = updated;
+              return updated;
+            });
+          };
+          const onRetryFailure = () => {
+            setMessages((prev) => {
+              const updated = prev.map(m =>
+                m.isRetrying
+                  ? { ...m, text: "😔 I tried reconnecting, but it's not working right now. Could you check your internet connection and try again? I'm still here when you're ready!", isRetrying: false }
+                  : m
+              );
+              messagesRef.current = updated;
+              return updated;
+            });
+          };
           setTimeout(async () => {
             try {
-              console.log("🔄 Auto-retrying request...")
-              const history = formatHistoryForAPI(messagesRef.current)
-              const retryResponse = await sendChatMessage(null, requestContext, history)
-              
-              // Remove the retry message and add the successful response
-              const retryBotMessage = {
-                id: Date.now() + 2,
-                role: "bot",
-                text: "✨ Got it! " + retryResponse.reply,
-                cards: retryResponse.cards || [],
-                followUp: retryResponse.followUp,
-                actionCard: retryResponse.actionCard, // Add action card on retry too
-                timestamp: new Date(),
-                sentiment: detectSentiment(retryResponse.reply, userMessage),
-              }
-
-              setMessages((prev) => {
-                // Remove the retry message and add success
-                const withoutRetry = prev.filter(m => !m.isRetrying)
-                const updated = [...withoutRetry, retryBotMessage]
-                messagesRef.current = updated
-                return updated
-              })
+              console.log("🔄 Auto-retrying request...");
+              const retryResponse = await doRetry();
+              onRetrySuccess(retryResponse);
             } catch (retryError) {
-              console.error("Retry failed:", retryError)
-              // Update message to show retry failed
-              setMessages((prev) => {
-                const updated = prev.map(m => 
-                  m.isRetrying 
-                    ? { ...m, text: "😔 I tried reconnecting, but it's not working right now. Could you check your internet connection and try again? I'm still here when you're ready!", isRetrying: false }
-                    : m
-                )
-                messagesRef.current = updated
-                return updated
-              })
+              const retryIsNetwork = !retryError?.response;
+              if (retryIsNetwork && isNetworkError) {
+                // Second retry after 10s for cold start
+                console.log("🔄 Second retry in 10s...");
+                setTimeout(async () => {
+                  try {
+                    const r2 = await doRetry();
+                    onRetrySuccess(r2);
+                  } catch (e2) {
+                    console.error("Second retry failed:", e2);
+                    onRetryFailure();
+                  }
+                }, 10000);
+              } else {
+                console.error("Retry failed:", retryError);
+                onRetryFailure();
+              }
             }
-          }, 2000) // Retry after 2 seconds
+          }, retryDelayMs);
         }
       } finally {
         setIsTyping(false)

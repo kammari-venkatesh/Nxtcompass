@@ -27,7 +27,9 @@ export const sendChatMessage = async (message, context = {}, history = null) => 
     return response.data;
   } catch (error) {
     const errorMessage = error.response?.data?.message || 'Failed to send message';
-    throw new Error(errorMessage);
+    const e = new Error(errorMessage);
+    e.response = error.response; // preserve so useMentor can distinguish network vs 4xx/5xx
+    throw e;
   }
 };
 
