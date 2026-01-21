@@ -77,7 +77,7 @@ export const chatWithAI = async (req, res, next) => {
         if (preferredModel === 'groq' && groqService.isAvailable()) {
           logger.info("Using Groq (Llama 3.1 70B) - FREE!")
           response = await groqService.getGroqChatCompletion(history, context || {})
-          actualModelUsed = 'groq-llama-3.1-70b'
+          actualModelUsed = 'groq-llama-3.3-70b'
         } else if (preferredModel === 'claude' && claudeService.isAvailable()) {
           logger.info("Using Claude 3.5 Sonnet for empathetic responses")
           response = await claudeService.getClaudeChatCompletion(history, context || {})
@@ -85,13 +85,13 @@ export const chatWithAI = async (req, res, next) => {
         } else if (preferredModel === 'openai' || preferredModel === 'gpt-4o') {
           logger.info("Using GPT-4o")
           response = await getChatCompletion(history, context || {})
-          actualModelUsed = 'gpt-4o'
+          actualModelUsed = 'gpt-4o-mini'
         } else if (preferredModel === 'auto') {
           // Auto-select: Groq (FREE!) > Claude > GPT-4o
           if (groqService.isAvailable()) {
             logger.info("🎉 Auto-selected: Groq (FREE - Llama 3.1 70B)")
             response = await groqService.getGroqChatCompletion(history, context || {})
-            actualModelUsed = 'groq-llama-3.1-70b'
+            actualModelUsed = 'groq-llama-3.3-70b'
           } else if (claudeService.isAvailable()) {
             logger.info("Auto-selected: Claude 3.5 Sonnet")
             response = await claudeService.getClaudeChatCompletion(history, context || {})
@@ -99,13 +99,13 @@ export const chatWithAI = async (req, res, next) => {
           } else {
             logger.info("Auto-selected: GPT-4o")
             response = await getChatCompletion(history, context || {})
-            actualModelUsed = 'gpt-4o'
+            actualModelUsed = 'gpt-4o-mini'
           }
         } else {
           // Default fallback
           logger.info("Using GPT-4o (default)")
           response = await getChatCompletion(history, context || {})
-          actualModelUsed = 'gpt-4o'
+          actualModelUsed = 'gpt-4o-mini'
         }
       } catch (llmError) {
         logger.error("LLM Error:", llmError.message)
@@ -128,7 +128,7 @@ export const chatWithAI = async (req, res, next) => {
         
         if (preferredModel === 'groq' && groqService.isAvailable()) {
           response = await groqService.getGroqChatCompletion(singleMessageHistory, context || {})
-          actualModelUsed = 'groq-llama-3.1-70b'
+          actualModelUsed = 'groq-llama-3.3-70b'
         } else if (preferredModel === 'claude' && claudeService.isAvailable()) {
           response = await claudeService.getClaudeChatCompletion(singleMessageHistory, context || {})
           actualModelUsed = 'claude-3.5-sonnet'
@@ -136,17 +136,17 @@ export const chatWithAI = async (req, res, next) => {
           // Auto-select FREE option first
           if (groqService.isAvailable()) {
             response = await groqService.getGroqChatCompletion(singleMessageHistory, context || {})
-            actualModelUsed = 'groq-llama-3.1-70b'
+            actualModelUsed = 'groq-llama-3.3-70b'
           } else if (claudeService.isAvailable()) {
             response = await claudeService.getClaudeChatCompletion(singleMessageHistory, context || {})
             actualModelUsed = 'claude-3.5-sonnet'
           } else {
             response = await getChatCompletion(singleMessageHistory, context || {})
-            actualModelUsed = 'gpt-4o'
+            actualModelUsed = 'gpt-4o-mini'
           }
         } else {
           response = await getChatCompletion(singleMessageHistory, context || {})
-          actualModelUsed = 'gpt-4o'
+          actualModelUsed = 'gpt-4o-mini'
         }
       } catch (error) {
         logger.warn("LLM failed, falling back to rule-based:", error.message)

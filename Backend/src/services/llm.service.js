@@ -342,9 +342,9 @@ export const getChatCompletion = async (history, context = {}) => {
     logger.info(`AI Mentor: Processing ${history.length} messages`)
 
     // First LLM call - let it decide to respond or use tools
-    // Using GPT-4o - the most advanced model for perfect student responses
+    // Using gpt-4o-mini - works on free tier, still excellent quality!
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4o-mini", // Free tier compatible, great for students!
       messages: messages,
       tools: tools,
       tool_choice: "auto",
@@ -413,9 +413,9 @@ export const getChatCompletion = async (history, context = {}) => {
       }
 
       // Second LLM call - generate response with tool results
-      // Using GPT-4o for high-quality synthesis of tool results
+      // Using gpt-4o-mini for high-quality synthesis of tool results
       const finalResponse = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4o-mini",
         messages: messages,
         temperature: 0.5,
         max_tokens: 1500,
@@ -759,7 +759,7 @@ export const getChatCompletionStream = async (history, context = {}, onChunk, on
 
     // Create streaming completion
     const stream = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: "gpt-4o-mini",
       messages: messages,
       tools: tools,
       tool_choice: "auto",
@@ -869,7 +869,7 @@ export const getChatCompletionStream = async (history, context = {}, onChunk, on
 
       // Second streaming call with tool results
       const finalStream = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4o-mini",
         messages: messages,
         temperature: 0.5,
         max_tokens: 1500,

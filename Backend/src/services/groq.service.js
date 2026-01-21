@@ -111,9 +111,10 @@ export const getGroqChatCompletion = async (history, context = {}) => {
 
     logger.info(`Groq: Processing ${history.length} messages`)
 
-    // Call Groq API with Llama 3.1 70B
+    // Call Groq API with current supported model
+    // Updated model name - Groq deprecated llama-3.1-70b-versatile
     const response = await groq.chat.completions.create({
-      model: "llama-3.1-70b-versatile", // Free, fast, excellent quality
+      model: "llama-3.3-70b-versatile", // Latest FREE model (Jan 2026)
       messages: messages,
       temperature: 0.6, // Balanced for empathy + accuracy
       max_tokens: 1500,
